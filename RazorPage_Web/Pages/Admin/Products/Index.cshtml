@@ -1,0 +1,48 @@
+﻿@page
+@model RazorPage_Web.Pages.Admin.Products.IndexModel
+@{
+}
+
+<h2 class="text-center mb-5">List of Products </h2>
+<div class="row mb-5">
+	<div class="col">
+		<a class='btn btn-primary' href='/Admin/Products/Create'>New Products</a>
+
+	</div>
+	<div class="col">
+		
+
+	</div>
+
+</div>
+<table class="table">
+	<tr>
+		<th>ID</th>
+		<th>Product Name</th>
+		<th>Barcode</th>
+		<th>Image</th>
+		<th>Description</th>
+		<th>Quantity</th>
+		<th>Weight</th>
+		<th>Action</th>
+	</tr>
+
+	@foreach(var product in Model.Products )
+	{
+		<tr>
+			<td>@product.Id</td>
+			<td>@product.ProductName</td>
+			<td>@product.Barcode</td>
+			<td><img src="/products/@product.ImageFileName" width="100" /></td>
+			<td>@product.Description</td>
+			<td>@product.Quantity</td>
+			<td>@product.Weight</td>
+			<td style="white-space:nowrap">
+				<a class='btn btn-primary btn-sm' href='/Admin/Products/Edit?id=@product.Id'>Edit</a>
+				<a class='btn btn-danger btn-sm' href='/Admin/Products/Delete?id=@product.Id'>Delete</a>
+			</td>
+
+		</tr>
+	}
+		
+</table>
