@@ -59,6 +59,19 @@
                 </div>
             </div>
 
+            <div class="row mb-3">
+                <label class="col-sm-4 col-form-label">Role</label>
+                <div class="col-sm-8">
+                    <select class="form-control" asp-for="Input.Role">
+                        <option value="">-- Select Role --</option>
+                        <option value="manager">Manager</option>
+                        <option value="staff">Staff</option>
+                        <!-- Add more roles as needed -->
+                    </select>
+                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                </div>
+            </div>
+
 
             <div class="row mb-3">
                 <div class="offset-sm-4 col-sm-4 d-grid">

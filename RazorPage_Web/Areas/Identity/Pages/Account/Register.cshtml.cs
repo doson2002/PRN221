@@ -80,6 +80,9 @@ namespace RazorPage_Web.Areas.Identity.Pages.Account
 
             [Required]
             public string PhoneNumber { get; set; }
+
+            [Required]
+            public string Role { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -136,7 +139,8 @@ namespace RazorPage_Web.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
-
+                    //Set user role
+                    await _userManager.AddToRoleAsync(user, Input.Role);
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));

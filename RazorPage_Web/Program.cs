@@ -22,6 +22,7 @@ namespace RazorPage_Web
                 );
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
             var app = builder.Build();
