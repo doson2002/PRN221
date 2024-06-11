@@ -10,7 +10,11 @@ namespace RazorPage_Web.DAL
         public AppDbContext(DbContextOptions options) : base(options)
         {
         }
-        public virtual DbSet<Product> Products { get; set; }
+		public virtual DbSet<Product> Products { get; set; }
+		public virtual DbSet<Customer> Customers { get; set; }
+		public virtual DbSet<Counter> Counters { get; set; }
+
+		public virtual DbSet<Promotion> Promotions { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
@@ -27,6 +31,8 @@ namespace RazorPage_Web.DAL
 
 			builder.Entity<IdentityRole>().HasData(admin, manager, staff);
 
+		
 		}
 	}
+
 }

@@ -1,0 +1,150 @@
+﻿@page
+@model RazorPage_Web.Pages.Admin.Users.IndexModel
+@{
+}
+
+<style>
+	/* CSS cho hiệu ứng mờ dần */
+	.fadeOut {
+		opacity: 1;
+		transition: opacity 1s ease-in-out;
+	}
+
+		.fadeOut.hide {
+			opacity: 0;
+		}
+
+	.dropdown {
+		position: relative;
+		display: inline-block;
+	}
+
+	.dropdown-toggle {
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+	}
+
+	.dropdown-menu {
+		display: none;
+		position: absolute;
+		z-index: 1;
+		background-color: #f1f1f1;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		padding: 12px 16px;
+	}
+
+	.dropdown:hover .dropdown-menu {
+		display: block;
+	}
+
+	.id-column {
+		width: 100px;
+	}
+
+	.name-column {
+		width: 200px;
+	}
+
+	.email-column {
+		width: 250px;
+	}
+
+	.phone-column {
+		width: 150px;
+	}
+
+	.role-column {
+		width: 150px;
+	}
+
+	.status-column {
+		width: 100px;
+	}
+
+	.action-column {
+		width: 150px;
+	}
+</style>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+	<div id="successMessage" class="alert alert-success fadeOut" role="alert">
+		@TempData["SuccessMessage"]
+	</div>
+}
+
+<script>
+	// Hàm này sẽ thêm class 'hide' để làm mờ dần thông báo
+	function fadeOut(element, duration) {
+		setTimeout(function () {
+			element.classList.add('hide');
+		}, duration);
+	}
+
+	// Gọi hàm fadeOut khi trang được tải
+	window.onload = function () {
+		var successMessage = document.getElementById('successMessage');
+		fadeOut(successMessage, 2000); // 2000ms tương đương với 2 giây
+	};
+</script>
+
+<h2 class="text-center mb-5">List of Users </h2>
+<div class="row mb-5">
+	<div class="col">
+		<a class='btn btn-primary' href="@Url.Content("~/Identity/Account/Register")">New Users</a>
+
+	</div>
+	<div class="col">
+		
+
+	</div>
+
+</div>
+<table class="table">
+	<tr>
+		<th class="id-column">ID</th>
+		<th class="name-column">Full Name</th>
+		<th class="email-column">Email</th>
+		<th class="phone-column"> Phone Number</th>
+		<th class="role-column">Role</th>
+		<th class="status-column">Status</th>
+		<th class="action-column">Action</th>
+	</tr>
+
+	@foreach(var user in Model.Users )
+	{
+		<tr>
+			<td class="id-column">@user.Id</td>
+			<td class="name-column">@user.FullName</td>
+			<td class="email-column">@user.Email</td>
+			<td class="phone-column">@user.PhoneNumber</td>
+			<th class="role-column">@Model.UserRoles[user.Id]</th>
+			<th class="status-column">@(user.IsActive ? "Active" : "Inactive")</th>
+			@*<td style="white-space:nowrap">
+				<a class='btn btn-primary btn-sm' href='/Admin/Users/Edit?id=@user.Id'>Edit</a>
+				<a class='btn btn-danger btn-sm' href='/Admin/Users/Delete?id=@user.Id'>Delete</a>
+			</td>*@
+			<td class="action-column">
+				<div class="dropdown">
+					<button class="dropdown-toggle">...</button>
+					<ul class="dropdown-menu">
+						<li><a asp-page="/Admin/Users/Edit" asp-route-id="@user.Id">Edit</a></li>
+
+						<li>
+							<a asp-page="/Admin/Users/Edit" asp-page-handler="ToggleUserStatus" asp-route-id="@user.Id">
+								@(user.IsActive ? "Deactivate" : "Activate")
+							</a>
+						</li>
+						<li><a asp-page="/Admin/Users/Delete" asp-route-id="@user.Id">Delete User</a></li>
+					</ul>
+				</div>
+			</td>
+
+		</tr>
+	}
+		
+</table>
+

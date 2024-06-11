@@ -8,6 +8,9 @@ namespace RazorPage_Web.Models
 
 		public string Address { get; set; } = "";
 
+		public bool IsActive { get; set; } = true;
+
+		public int? CounterID { get; set; }
 
 	}
 }

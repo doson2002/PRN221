@@ -5,6 +5,22 @@
 }
 
 
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#roleSelect').change(function () {
+                var selectedRole = $(this).val();
+
+                if (selectedRole === 'staff') {
+                    $('#counterSelectDiv').show();
+                } else {
+                    $('#counterSelectDiv').hide();
+                }
+            });
+        });
+    </script>
+}
+
 <div class="row">
     <div class="col-lg-6 mx-auto rounded border p-3">
         <h2>Create a new account.</h2>
@@ -62,7 +78,7 @@
             <div class="row mb-3">
                 <label class="col-sm-4 col-form-label">Role</label>
                 <div class="col-sm-8">
-                    <select class="form-control" asp-for="Input.Role">
+                    <select class="form-control" asp-for="Input.Role" id="roleSelect">
                         <option value="">-- Select Role --</option>
                         <option value="manager">Manager</option>
                         <option value="staff">Staff</option>
@@ -73,12 +89,31 @@
             </div>
 
 
+            <div class="row mb-3" id="counterSelectDiv" style="display:none;">
+                <label class="col-sm-4 col-form-label">Counter</label>
+                <div class="col-sm-8">
+
+                    @if (Model != null && Model.Counters != null)
+                    {
+                        <select class="form-control" asp-for="Input.CounterId" id="counterSelect">
+                            <option value="">-- Select Counter --</option>
+                            @foreach (var counter in Model.Counters)
+                            {
+                                <option value="@counter.Id">@counter.Location</option>
+                            }
+                        </select>
+                    }
+                    <span asp-validation-for="Input.CounterId" class="text-danger"></span>
+                </div>
+            </div>
+
+
             <div class="row mb-3">
                 <div class="offset-sm-4 col-sm-4 d-grid">
                     <button type="submit" class="btn btn-primary">Register</button>
                 </div>
                 <div class="col-sm-4 d-grid">
-                    <button class="btn btn-outline-primary" href="/Admin/Products/Index" role="button">Cancel</button>
+                    <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
                 </div>
 
             </div>

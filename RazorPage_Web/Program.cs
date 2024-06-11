@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RazorPage_Web.DAL;
 using Microsoft.AspNetCore.Identity;
 using RazorPage_Web.Models;
@@ -10,7 +10,7 @@ namespace RazorPage_Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+  
             // Add services to the container.
             builder.Services.AddRazorPages();
             //DI
@@ -35,6 +35,7 @@ namespace RazorPage_Web
                 app.UseHsts();
             }
 
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -44,7 +45,23 @@ namespace RazorPage_Web
 
             app.MapRazorPages();
 
-            app.Run();
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllerRoute(
+					name: "admin_users",
+					pattern: "Admin/Users/{action}/{id?}",
+					defaults: new { controller = "Users", area = "Admin" }
+				);
+			});
+
+			using (var scope = app.Services.CreateScope())
+			{
+				var services = scope.ServiceProvider;
+				var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+				DbInitializer.InitializeAsync(services, userManager).Wait();
+			}
+
+			app.Run();
         }
     }
 }
