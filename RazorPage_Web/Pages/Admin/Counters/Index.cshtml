@@ -1,0 +1,37 @@
+﻿@page
+@model RazorPage_Web.Pages.Admin.Counters.IndexModel
+@{
+}
+<h2 class="text-center mb-5">List of Counters </h2>
+<div class="row mb-5">
+	<div class="col">
+		<a class='btn btn-primary' href='/Admin/Counters/Create'>Add New Counter</a>
+
+	</div>
+	<div class="col">
+	</div>
+
+</div>
+<table class="table">
+	<tr>
+		<th>ID</th>
+		<th>Counter Name</th>
+		<th>Location</th>
+		<th>Action</th>
+	</tr>
+
+	@foreach (var counter in Model.Counters)
+	{
+		<tr>
+			<td>@counter.Id</td>
+			<td>@counter.Name</td>
+			<td>@counter.Location</td>
+			<td style="white-space:nowrap">
+				<a class='btn btn-primary btn-sm' href='/Admin/Counters/Edit?id=@counter.Id'>Edit</a>
+				<a class='btn btn-danger btn-sm' href='/Admin/Counters/Delete?id=@counter.Id'>Delete</a>
+			</td>
+
+		</tr>
+	}
+
+</table>

@@ -1,0 +1,63 @@
+﻿@page
+@model RazorPage_Web.Pages.Admin.Promotions.CreateModel
+@{
+}
+
+<div class="row">
+	<div class="col-md-8 mx-auto rounded border p-3">
+		<h2 class="text-center mb-5">New Promotion</h2>
+
+		<form method="post" enctype="multipart/form-data">
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Code</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="promotionDTO.Code">
+					<span asp-validation-for="promotionDTO.Code" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Discount Percentage</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="promotionDTO.DiscountPercentage">
+					<span asp-validation-for="promotionDTO.DiscountPercentage" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Fixed Discount Amount</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="promotionDTO.FixedDiscountAmount">
+					<span asp-validation-for="promotionDTO.FixedDiscountAmount" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Start Date</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="date" asp-for="promotionDTO.StartDate">
+					<span asp-validation-for="promotionDTO.StartDate" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">End Date</label>
+				<div class="col-sm-8">
+					<input class="form-control" type="date" asp-for="promotionDTO.EndDate">
+					<span asp-validation-for="promotionDTO.EndDate" class="text-danger"></span>
+				</div>
+			</div>
+
+
+			<div class="row mb-3">
+				<div class="offset-sm-4 col-sm-4 d-grid">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+				<div class="col-sm-4 d-grid">
+					<a class="btn btn-outline-primary" href="/Admin/Promotions/Index" role="button">Cancel</a>
+				</div>
+				
+			</div>
+
+		</form>
+	</div>
+</div>

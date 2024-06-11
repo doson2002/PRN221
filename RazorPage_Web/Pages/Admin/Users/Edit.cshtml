@@ -1,0 +1,121 @@
+﻿@page
+@model RazorPage_Web.Pages.Admin.Users.EditModel
+@{
+	@section Scripts {
+		<script type="text/javascript">
+			$(document).ready(function () {
+				// Hàm để kiểm tra và hiển thị/ẩn phần chọn Counter
+				function toggleCounterSelect() {
+					var selectedRole = $('#roleSelect').val();
+					if (selectedRole === 'staff') {
+						$('#counterSelectDiv').show();
+					} else {
+						$('#counterSelectDiv').hide();
+					}
+				}
+
+				// Gọi hàm toggleCounterSelect khi trang tải
+				toggleCounterSelect();
+
+				// Gọi hàm toggleCounterSelect khi giá trị của roleSelect thay đổi
+				$('#roleSelect').change(function () {
+					toggleCounterSelect();
+				});
+			});
+		</script>
+	}
+}
+<div class="row">
+	<div class="col-md-8 mx-auto rounded border p-3">
+		<h2 class="text-center mb-5">Edit User</h2>
+
+		<form method="post" enctype="multipart/form-data">
+
+			<input type="hidden" asp-for="@Model.ApplicationUser.Id" />
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">ID</label>
+				<div class="col-sm-8">
+					<input readonly class="form-control-plaintext" value="@Model.ApplicationUser.Id">
+				
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Full Name</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="ApplicationUser.FullName">
+					<span asp-validation-for="ApplicationUser.FullName" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Email</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="ApplicationUser.Email">
+					<span asp-validation-for="ApplicationUser.Email" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Address</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="ApplicationUser.Address">
+					<span asp-validation-for="ApplicationUser.Address" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Phone Number</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="ApplicationUser.PhoneNumber">
+					<span asp-validation-for="ApplicationUser.PhoneNumber" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Role</label>
+				<div class="col-sm-8">
+					<select class="form-control" asp-for="Role" id="roleSelect">
+						  <option value="">-- Select Role --</option>
+						<option value="admin" selected="@((Model.Role == "admin"))">Admin</option>
+						<option value="manager" selected="@((Model.Role == "manager"))">Manager</option>
+						<option value="staff" selected="@((Model.Role == "staff"))">Staff</option>
+						<!-- Add more roles as needed -->
+					</select>
+					<span asp-validation-for="Role" class="text-danger"></span>
+				</div>
+			</div>
+
+
+			<div class="row mb-3" id="counterSelectDiv" style="display:none;">
+				<label class="col-sm-4 col-form-label">Counter</label>
+				<div class="col-sm-8">
+
+					@if (Model != null )
+					{
+						<select class="form-control" asp-for="ApplicationUser.CounterID" id="counterSelect">
+								<option value="">-- Select Counter Location --</option>
+							
+							@foreach (var counter in Model.Counters)
+							{
+								<option value="@counter.Id">@counter.Location</option>
+							}
+						</select>
+					}
+					<span asp-validation-for="ApplicationUser.CounterID" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<div class="offset-sm-4 col-sm-4 d-grid">
+					<button type="submit" class="btn btn-primary">Submit</button>
+				</div>
+				<div class="col-sm-4 d-grid">
+					<a class="btn btn-outline-primary" asp-page="/Admin/Users/Index" role="button">Cancel</a>
+				</div>
+
+			</div>
+
+		</form>
+	</div>
+</div>

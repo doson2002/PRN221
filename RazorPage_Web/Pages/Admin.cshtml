@@ -1,6 +1,12 @@
 ﻿@page
-@model RazorPage_Web.Pages.AdminModel
+@model RazorPage_Web.Pages.Shared.Pages_Shared__Sidebar
 @{
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-<h2 class="text-center">Welcome	Admin </h2>
+<div class="d-flex">
+    <div class="sidebar bg-white text-dark p-3">
+        @await Html.PartialAsync("_Sidebar")
+    </div>
+  
+</div>
