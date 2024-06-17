@@ -9,6 +9,7 @@ namespace RazorPage_Web.Pages.Admin.Promotions
     {
         private readonly IWebHostEnvironment environment;
         private readonly AppDbContext _context;
+
         [BindProperty]
         public PromotionDTO promotionDTO { get; set; } = new PromotionDTO();
         public CreateModel(IWebHostEnvironment environment, AppDbContext context)

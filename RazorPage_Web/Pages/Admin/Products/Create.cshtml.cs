@@ -45,7 +45,8 @@ namespace RazorPage_Web.Pages.Admin.Products
 			string newFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff");
             newFileName += Path.GetExtension(productDTO.ImageFile!.FileName);
 
-            string imageFullPath = environment.WebRootPath + "/products/" + newFileName; 
+            // string imageFullPath = environment.WebRootPath + "/products/" + newFileName; 
+            string imageFullPath = Path.Combine(environment.WebRootPath, "products", newFileName);
             using (var stream = System.IO.File.Create(imageFullPath))
             {
                 productDTO.ImageFile.CopyTo(stream);
@@ -59,7 +60,11 @@ namespace RazorPage_Web.Pages.Admin.Products
                 Description = productDTO.Description ?? "",
                 Quantity = productDTO.Quantity,
                 Weight = productDTO.Weight,
+                PriceProcessing = productDTO.PriceProcessing,
+                PriceStone = productDTO.PriceStone,
+                PriceRate = productDTO.PriceRate,
                 ImageFileName = newFileName,
+                TypePriceId = productDTO.TypePriceId,
 
             };
             context.Products.Add(product);
@@ -71,8 +76,12 @@ namespace RazorPage_Web.Pages.Admin.Products
             productDTO.Barcode = "";
             productDTO.Quantity = 0;
             productDTO.Weight = 0;
+            productDTO.PriceProcessing = 0;
+            productDTO.PriceStone = 0;
+            productDTO.PriceRate = 0;
             productDTO.Description = "";
             productDTO.ImageFile = null;
+            productDTO.TypePriceId = 0;
 
             ModelState.Clear();
 

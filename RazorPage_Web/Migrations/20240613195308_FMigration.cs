@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RazorPage_Web.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class FMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -59,6 +59,39 @@ namespace RazorPage_Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<double>(type: "float", nullable: false),
+                    OrderID = table.Column<int>(type: "int", nullable: false),
+                    ProductID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Discount = table.Column<double>(type: "float", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CustomerID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -66,10 +99,14 @@ namespace RazorPage_Web.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Barcode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PriceProcessing = table.Column<double>(type: "float", nullable: false),
+                    PriceStone = table.Column<double>(type: "float", nullable: false),
+                    PriceRate = table.Column<double>(type: "float", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false),
-                    ImageFileName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    ImageFileName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    TypePriceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,6 +128,22 @@ namespace RazorPage_Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Promotions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TypePrices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PurchasePricePerGram = table.Column<double>(type: "float", nullable: false),
+                    SellPricePerGram = table.Column<double>(type: "float", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TypePrices", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -238,9 +291,9 @@ namespace RazorPage_Web.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "72c99b43-e80d-4863-98e8-e5c0bf53bcd5", null, "admin", "admin" },
-                    { "7c7ec8d2-9a99-422d-a7c5-400e9166b4fc", null, "manager", "manager" },
-                    { "82919046-f0a3-42f1-aef5-bc8d60d1e519", null, "staff", "staff" }
+                    { "13995dc9-d0b6-42b7-87b9-6d4b3e6974b8", null, "admin", "admin" },
+                    { "13cd5b9f-af52-4819-8c33-5e73b6b1906f", null, "manager", "manager" },
+                    { "ac8cc471-a5e5-4868-bc38-5b41319f19c9", null, "staff", "staff" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -328,10 +381,19 @@ namespace RazorPage_Web.Migrations
                 name: "Customers");
 
             migrationBuilder.DropTable(
+                name: "OrderDetails");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Promotions");
+
+            migrationBuilder.DropTable(
+                name: "TypePrices");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -12,8 +12,8 @@ using RazorPage_Web.DAL;
 namespace RazorPage_Web.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240611125346_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20240613195308_FMigration")]
+    partial class FMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,19 +54,19 @@ namespace RazorPage_Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "72c99b43-e80d-4863-98e8-e5c0bf53bcd5",
+                            Id = "13995dc9-d0b6-42b7-87b9-6d4b3e6974b8",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "7c7ec8d2-9a99-422d-a7c5-400e9166b4fc",
+                            Id = "13cd5b9f-af52-4819-8c33-5e73b6b1906f",
                             Name = "manager",
                             NormalizedName = "manager"
                         },
                         new
                         {
-                            Id = "82919046-f0a3-42f1-aef5-bc8d60d1e519",
+                            Id = "ac8cc471-a5e5-4868-bc38-5b41319f19c9",
                             Name = "staff",
                             NormalizedName = "staff"
                         });
@@ -322,6 +322,61 @@ namespace RazorPage_Web.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("RazorPage_Web.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CustomerID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Discount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("RazorPage_Web.Models.OrderDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrderID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderDetails");
+                });
+
             modelBuilder.Entity("RazorPage_Web.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -343,12 +398,24 @@ namespace RazorPage_Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<double>("PriceProcessing")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PriceRate")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PriceStone")
+                        .HasColumnType("float");
+
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TypePriceId")
                         .HasColumnType("int");
 
                     b.Property<double>("Weight")
@@ -389,6 +456,32 @@ namespace RazorPage_Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Promotions");
+                });
+
+            modelBuilder.Entity("RazorPage_Web.Models.TypePrice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("PurchasePricePerGram")
+                        .HasColumnType("float");
+
+                    b.Property<double>("SellPricePerGram")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TypePrices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -444,11 +537,9 @@ namespace RazorPage_Web.Migrations
 
             modelBuilder.Entity("RazorPage_Web.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("RazorPage_Web.Models.Counter", "Counter")
+                    b.HasOne("RazorPage_Web.Models.Counter", null)
                         .WithMany("Users")
                         .HasForeignKey("CounterID");
-
-                    b.Navigation("Counter");
                 });
 
             modelBuilder.Entity("RazorPage_Web.Models.Counter", b =>
