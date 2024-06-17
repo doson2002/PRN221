@@ -33,6 +33,28 @@
 			</div>
 
 			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Price Processing</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="productDTO.PriceProcessing">
+					<span asp-validation-for="productDTO.PriceProcessing" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Price Stone</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="productDTO.PriceStone">
+					<span asp-validation-for="productDTO.PriceStone" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Price Rate</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="productDTO.PriceRate">
+					<span asp-validation-for="productDTO.PriceRate" class="text-danger"></span>
+				</div>
+			</div>
+			<div class="row mb-3">
 				<label class="col-sm-4 col-form-label">Weight</label>
 				<div class="col-sm-8">
 					<input class="form-control" asp-for="productDTO.Weight">
@@ -53,6 +75,14 @@
 				<div class="col-sm-8">
 					<input class="form-control" asp-for="productDTO.ImageFile">
 					<span asp-validation-for="productDTO.ImageFile" class="text-danger"></span>
+				</div>
+			</div>
+
+			<div class="row mb-3">
+				<label class="col-sm-4 col-form-label">Type</label>
+				<div class="col-sm-8">
+					<input class="form-control" asp-for="productDTO.TypePriceId">
+					<span asp-validation-for="productDTO.TypePriceId" class="text-danger"></span>
 				</div>
 			</div>
 

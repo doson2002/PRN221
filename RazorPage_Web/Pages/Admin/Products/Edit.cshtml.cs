@@ -41,6 +41,10 @@ namespace RazorPage_Web.Pages.Admin.Products
             ProductDTO.Description = product.Description;
             ProductDTO.Weight = product.Weight;
             ProductDTO.Quantity = product.Quantity;
+            ProductDTO.PriceProcessing = product.PriceProcessing;
+            ProductDTO.PriceStone = product.PriceStone;
+            ProductDTO.PriceRate = product.PriceRate;
+            ProductDTO.TypePriceId = product.TypePriceId;
             Product = product;
 
         }
@@ -81,10 +85,15 @@ namespace RazorPage_Web.Pages.Admin.Products
             //update the product in the database
             product.ProductName = ProductDTO.ProductName;
             product.Barcode = ProductDTO.Barcode;
+            product.PriceProcessing = ProductDTO.PriceProcessing;
+            product.PriceStone = ProductDTO.PriceStone;
+            product.PriceRate = ProductDTO.PriceRate;
             product.Description = ProductDTO.Description;
             product.Quantity = ProductDTO.Quantity;
             product.Weight = ProductDTO.Weight;
             product.ImageFileName = newFileName;
+            product.TypePriceId = ProductDTO.TypePriceId;
+
 
             context.SaveChanges();
 

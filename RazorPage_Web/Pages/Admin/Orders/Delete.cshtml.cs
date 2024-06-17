@@ -1,7 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RazorPage_Web.DAL;
 
-namespace RazorPage_Web.Pages.Admin.Promotions
+namespace RazorPage_Web.Pages.Admin.Orders
 {
     public class DeleteModel : PageModel
     {
@@ -17,19 +18,19 @@ namespace RazorPage_Web.Pages.Admin.Promotions
         {
             if (id == null)
             {
-                Response.Redirect("/Admin/Promotions/Index");
+                Response.Redirect("/Admin/Orders/Index");
                 return;
             }
-            var promotion = context.Promotions.Find(id);
-            if (promotion == null)
+            var order = context.Orders.Find(id);
+            if (order == null)
             {
-				Response.Redirect("/Admin/Promotions/Index");
+				Response.Redirect("/Admin/Orders/Index");
 				return;
 			}
-            context.Promotions.Remove(promotion);
+            context.Orders.Remove(order);
             context.SaveChanges();
 
-			Response.Redirect("/Admin/Promotions/Index");
+			Response.Redirect("/Admin/Orders/Index");
 		}
     }
 }

@@ -16,6 +16,13 @@ namespace RazorPage_Web.Models
         public string ProductName { get; set; }
         [Required]
 		public string Barcode { get; set; }
+
+        [Required]
+        public double PriceProcessing { get; set; }
+        [Required]
+        public double PriceStone { get; set; }
+        [Required]
+        public double PriceRate { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
@@ -24,6 +31,9 @@ namespace RazorPage_Web.Models
         public double Weight { get; set; }
         [MaxLength(100)]
         public string ImageFileName { get; set; } = "";
+        
+        [Required]
+        public int TypePriceId { get; set; }
 
 
 

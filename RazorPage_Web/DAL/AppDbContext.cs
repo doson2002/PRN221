@@ -16,6 +16,12 @@ namespace RazorPage_Web.DAL
 
 		public virtual DbSet<Promotion> Promotions { get; set; }
 
+		public virtual DbSet<Order> Orders { get; set; }
+
+		public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+
+		public virtual DbSet<TypePrice> TypePrices { get; set; }
+
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);

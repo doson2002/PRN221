@@ -2,6 +2,7 @@
 using RazorPage_Web.DAL;
 using Microsoft.AspNetCore.Identity;
 using RazorPage_Web.Models;
+using RazorPage_Web.Pages.Admin.Promotions;
 
 namespace RazorPage_Web
 {
@@ -25,6 +26,9 @@ namespace RazorPage_Web
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
+            // Add PromotionService
+            builder.Services.AddScoped<PromotionService>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -40,6 +44,8 @@ namespace RazorPage_Web
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication(); // Add this line to enable authentication
 
             app.UseAuthorization();
 

@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -19,4 +19,7 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+.gray-background {
+    background-color: #cccccc; /* Mã màu xám theo ý bạn */
 }
