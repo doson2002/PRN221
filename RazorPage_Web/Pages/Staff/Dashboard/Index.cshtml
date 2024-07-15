@@ -1,0 +1,64 @@
+﻿@page
+@model RazorPage_Web.Pages.Staff.Dashboard.IndexModel
+@{
+}
+<style>
+    .gray-background {
+        background-color: #cccccc; /* Mã màu xám theo ý bạn */
+    }
+</style>
+
+<section class="section dashboard">
+    <div class="row gray-background">
+        <!-- Sales Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card card-info card-sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">Services <span>| All Time</span></h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-cart"></i>
+                        </div>
+                    </div>
+                    <div class="ps-3">
+                        <h6>@ViewBag.Services</h6>
+                        <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-2">increase</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6">
+            <div class="card card-info card-sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">Services <span>| All Time</span></h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-cart"></i>
+                        </div>
+                    </div>
+                    <div class="ps-3">
+                        <h6>@ViewBag.Services</h6>
+                        <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-2">increase</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6">
+            <div class="card card-info card-sales-card">
+                <div class="card-body">
+                    <h5 class="card-title">Services <span>| All Time</span></h5>
+                    <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="bi bi-cart"></i>
+                        </div>
+                    </div>
+                    <div class="ps-3">
+                        <h6>@ViewBag.Services</h6>
+                        <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-2">increase</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

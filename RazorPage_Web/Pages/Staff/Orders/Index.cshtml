@@ -1,0 +1,74 @@
+﻿@page
+@model RazorPage_Web.Pages.Staff.Orders.IndexModel
+@{
+}
+<h2 class="text-center mb-5">List of Order </h2>
+<div class="row mb-5">
+	<div class="col">
+		<button class="btn btn-primary" id="makeNewOrderBtn">Make New Order</button>
+	</div>
+	<div class="col">
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="orderModalLabel">Select Order Type</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<button class="btn btn-success" id="purchaseBtn">Purchase</button>
+				<button class="btn btn-danger" id="sellBtn">Sell</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<table class="table">
+	<tr>
+		<th>ID</th>
+		<th>Date</th>
+		<th>Discount</th>
+		<th>Created By</th>
+		<th>Type</th>
+		<th>Customer</th>
+		<th>Action</th>
+	</tr>
+
+	@foreach (var order in Model.Orders)
+	{
+		<tr>
+			<td>@order.Id</td>
+			<td>@order.Date</td>
+			<td>@order.Discount</td>
+			<td>@order.CreatedBy</td>
+			<td>@order.Type</td>
+			<td>@order.CustomerID</td>
+		</tr>
+	}
+
+</table>
+
+@section Scripts {
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<script>
+		document.getElementById('makeNewOrderBtn').addEventListener('click', function() {
+			$('#orderModal').modal('show');
+		});
+
+		document.getElementById('purchaseBtn').addEventListener('click', function() {
+			window.location.href = '@Url.Page("/Staff/Orders/Create", new { type = "purchase" })';
+		});
+
+		document.getElementById('sellBtn').addEventListener('click', function() {
+			window.location.href = '@Url.Page("/Staff/Orders/Create", new { type = "sell" })';
+		});
+	</script>
+}

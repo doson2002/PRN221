@@ -1,0 +1,74 @@
+﻿@page
+@model RazorPage_Web.Pages.Admin.Orders.DetailsModel
+@{
+    ViewData["Title"] = "Order Details";
+}
+<style>
+    /* Định nghĩa kiểu cho các tiêu đề cột trong bảng */
+    .table th {
+        border-right: 1px solid #dee2e6; /* Màu viền phải cho mỗi cột */
+    }
+
+        /* Đảm bảo rằng cột cuối cùng không có đường viền bên phải */
+        .table th:last-child {
+            border-right: none;
+        }
+</style>
+
+<h2 class="text-center mb-5">Order Details</h2>
+
+<div class="card">
+    <div class="card-header">
+        Order Information
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Order ID</dt>
+            <dd class="col-sm-9">@Model.Order.Id</dd>
+
+            <dt class="col-sm-3">Date</dt>
+            <dd class="col-sm-9">@Model.Order.Date.ToString("MM/dd/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Discount</dt>
+            <dd class="col-sm-9">@Model.Order.Discount</dd>
+
+            <dt class="col-sm-3">Created By</dt>
+            <dd class="col-sm-9">@Model.Order.CreatedBy</dd>
+
+            <dt class="col-sm-3">Type</dt>
+            <dd class="col-sm-9">@Model.Order.Type</dd>
+
+            <dt class="col-sm-3">Customer ID</dt>
+            <dd class="col-sm-9">@Model.Order.CustomerID</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        Order Details
+    </div>
+    <table class="table card-body">
+        <thead>
+            <tr>
+                <th>Product ID</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detail in Model.OrderDetails)
+            {
+                <tr>
+                    <td>@detail.ProductID</td>
+                    <td>@detail.Quantity</td>
+                    <td>@detail.UnitPrice</td>
+                    <td>@(detail.Quantity * detail.UnitPrice)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<a asp-page="./Index" class="btn btn-primary mt-4">Back to List</a>

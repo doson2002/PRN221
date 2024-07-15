@@ -4,14 +4,26 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
+<style>
+    .dropdown-arrow {
+        display: inline-block;
+        margin-left: 5px; /* Adjust the spacing as needed */
+        width: 0;
+        height: 0;
+        vertical-align: middle;
+        border-top: 5px solid; /* Creates the top part of the arrow */
+        border-right: 5px solid transparent; /* Right side of the arrow */
+        border-left: 5px solid transparent; /* Left side of the arrow */
+    }
+</style>
+
 @if (SignInManager.IsSignedIn(User))
 {
         if (User.IsInRole("admin"))
         {
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Admin
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                Admin <span class="dropdown-arrow"></span>
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a></li>
@@ -72,4 +84,4 @@ else
         <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-</ul>
+

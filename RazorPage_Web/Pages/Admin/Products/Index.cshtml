@@ -5,14 +5,22 @@
 
 <h2 class="text-center mb-5">List of Products </h2>
 <div class="row mb-5">
+
 	<div class="col">
+		<form class="form-inline" method="get" action="/Admin/Products">
+
+			<div class="input-group">
+				<input type="text" name="searchBarcode" class="form-control" placeholder="Search by Barcode" value="@Model.SearchBarcode" />
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-primary">Search</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col d-flex justify-content-end">
 		<a class='btn btn-primary' href='/Admin/Products/Create'>New Products</a>
-
 	</div>
-	<div class="col">
-		
-
-	</div>
+	
 
 </div>
 <table class="table">
@@ -46,3 +54,25 @@
 	}
 		
 </table>
+
+<!-- Pagination Controls -->
+<div class="pagination-wrapper">
+	<nav aria-label="Page navigation example">
+		<ul class="pagination">
+			<li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+				<a class="page-link" href="/Admin/Products?currentPage=@(Model.CurrentPage - 1)&searchBarcode=@Model.SearchBarcode">Previous</a>
+			</li>
+
+			@for (int i = 1; i <= Model.TotalPages; i++)
+			{
+				<li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+					<a class="page-link" href="/Admin/Products?currentPage=@i&searchBarcode=@Model.SearchBarcode">@i</a>
+				</li>
+			}
+
+			<li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+				<a class="page-link" href="/Admin/Products?currentPage=@(Model.CurrentPage + 1)&searchBarcode=@Model.SearchBarcode">Next</a>
+			</li>
+		</ul>
+	</nav>
+</div>
