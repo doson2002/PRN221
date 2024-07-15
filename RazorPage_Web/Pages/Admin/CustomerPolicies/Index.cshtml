@@ -1,0 +1,63 @@
+﻿@page
+@model RazorPage_Web.Pages.Admin.CustomerPolicies.IndexModel
+@{
+    ViewData["Title"] = "Customer Policies";
+}
+
+<div class="container mt-5">
+    <h2>Customer Policies</h2>
+    <div class="table-responsive mt-4">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Created By</th>
+                    <th>Discount</th>
+                    <th>Valid</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.CustomerPolicies != null)
+                {
+                    for (var i = 0; i < Model.CustomerPolicies.Count; i++)
+                    {
+                        <tr>
+                            <td>@(i + 1)</td>
+                            <td>@Model.CustomerPolicies[i].CreatedBy</td>
+                            <td>
+                                @if (Model.CustomerPolicies[i].FixedDiscountAmount != null)
+                                {
+                                    @Model.CustomerPolicies[i].FixedDiscountAmount.Value.ToString("N0")
+                                    @:VNĐ
+
+                                    }
+                                else if (Model.CustomerPolicies[i].DiscountRate != null)
+                                {
+                                    @Model.CustomerPolicies[i].DiscountRate.ToString()
+                                    @:%
+                                    }
+                            </td>
+                            <td>@Model.CustomerPolicies[i].ValidFrom.ToShortDateString() - @Model.CustomerPolicies[i].ValidTo.ToShortDateString()</td>
+                            <td>@Model.CustomerPolicies[i].PublishingStatus</td>
+                            <td class="action-column">
+                                <div class="dropdown">
+                                    <button class="dropdown-toggle" data-toggle="dropdown">...</button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a asp-page="/Admin/CustomerPolicies/Index" asp-page-handler="UpdateStatus" asp-route-id="@Model.CustomerPolicies[i].Id" asp-route-status="Accepted">Accept</a>
+                                        </li>
+                                        <li>
+                                            <a asp-page="/Admin/CustomerPolicies/Index" asp-page-handler="UpdateStatus" asp-route-id="@Model.CustomerPolicies[i].Id" asp-route-status="Rejected">Reject</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

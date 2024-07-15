@@ -117,10 +117,178 @@
         width: 110px; /* Chiều rộng cố định cho nút */
     }
     
+    /* Bo tròn cho bảng */
+    .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        border: 1px solid #333;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+        /* Bo tròn cho phần tiêu đề của bảng */
+        .table thead {
+            background-color: #333;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .table th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        .table th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+        .table tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 10px;
+        }
+
+        .table tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 10px;
+        }
+    /* Đặt tất cả nội dung vào một khung */
+    .container {
+        border: 1px solid #ccc; /* Đường viền màu xám nhạt */
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #e0e0e0; /* Màu nền xám */
+    }
+
+    /* Kiểu chữ cho các dòng chữ Provisional, Total Discount, Total */
+    .label {
+        font-weight: bold;
+        font-size: 16px;
+        color: #333; /* Màu chữ đậm để dễ nhìn */
+    }
+
+    /* Dòng item */
+    .line-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
 </style>
+<h1 class ="text-center mb-5">@ViewData["OrderType"]</h1>
+
+@if (Model.Type == "purchase")
+{
+    <input type="text" class="form-control" id="searchOrder" name="searchOrder" placeholder="Input OrderID">
+    <ul class="list-group" id="orderResults"></ul>
+
+    <div class="table-responsive">
+        <table id="orderDetailsTable" class="table">
+            <thead>
+                <tr>
+                    <th>OrderDetail ID</th>
+                    <th>Product ID</th>
+                    <th>Barcode</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Order details will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+}
+<div class="row">
+    <div class="col-4">
+        <div class="form-group">
+            <label style="font-size: 23px; color: red;" for="searchCustomer">Customer Information</label>
+            <input type="text" class="form-control" id="searchCustomer" name="searchCustomer" placeholder="Input Customer Phone">
+            <ul class="list-group" id="customerResults"></ul>
+        </div>
+    </div>
+</div>
+
+<div id="selectedCustomer" class="d-none">
+    <h4>Selected Customer</h4>
+    <p id="customerInfo"></p>
+</div>
 
 <div class="container mt-5">
-    <h1>@ViewData["OrderType"]</h1>
+    <!-- Form để tìm kiếm sản phẩm -->
+    <div class="row mb-3">
+        <div class="col-12">
+            <form class="form-inline" method="get" action="/Admin/Orders/Create">
+                <div class="input-group">
+                    <label style="font-size: 23px; color: red; margin-right: 15px;" for="searchBarcode">Products List</label>
+                    <input type="text" id="searchBarcode" name="searchBarcode" class="form-control" placeholder="Search by Barcode" value="@Model.SearchBarcode" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<div class="row">
+    <div class="col-12">
+        <table class="table table-striped">
+            <thead style="background-color: #333; color: white;">
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Barcode</th>
+                    <th>Quantity</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="productTableBody">
+                @foreach (var product in Model.ProductDetails)
+                {
+                    <tr>
+                        <td>
+                            <img src="@product.ImageUrl" alt="@product.ProductName" class="img-thumbnail" style="max-width: 100px;">
+                        </td>
+                        <td>@product.ProductName</td>
+                        <td>@product.Barcode</td>
+                        <td>@product.Quantity</td>
+                        <td>@product.Type</td>
+                        <td>
+                            <button type="button" class="btn btn-primary add-to-cart-btn"
+                                    data-id="@product.Id"
+                                    data-name="@product.ProductName"
+                                    data-type="@product.Type"
+                                    data-stock="@product.Quantity">
+                                Add to cart
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" href="?currentPage=@(Model.CurrentPage - 1)" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="?currentPage=@i">@i</a>
+                    </li>
+                }
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                    <a class="page-link" href="?currentPage=@(Model.CurrentPage + 1)" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    </div>
+
+</div>
+
+<div class="container mt-5">
 
     <form id="myForm" method="post">
         <!-- Hidden input for storing the selected customer ID -->
@@ -132,105 +300,234 @@
 
         <input type="hidden" id="discountInput" name="discount" value="0" />
 
+        <input type="hidden" id="type" name="type" value="@Model.Type" />
 
+
+        <div id="cartInformation" class="mt-5">
+            <h4>Cart Information</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                </tbody>
+            </table>
+        </div>
         @if (Model.Type == "sell")
         {
-            <div class="row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <label style="font-size: 23px; color: red;" for="searchCustomer">Customer Information</label>
-                        <input type="text" class="form-control" id="searchCustomer" name="searchCustomer" placeholder="Input Customer Phone">
-                        <ul class="list-group" id="customerResults"></ul>
+                <div id="voucherSection" class="mt-5 container">
+                    <h4>Apply Voucher</h4>
+                    <div class="form-group form-inline">
+                        <label for="promotionCode">Enter Voucher Code</label>
+                        <input type="text" class="form-control" id="promotionCode" name="promotionCode">
+                        <button type="button" class="btn btn-primary" id="applyPromotionBtn">Apply Voucher</button>
+                    </div>
+                    <ul class="list-group" id="promotionResults"></ul>
+
+                    <!-- Div để hiển thị thông tin Promotion -->
+                    <div id="selectedPromotionInfo" class="mt-3 d-none">
+                        <p id="selectedPromotionMessage"></p>
+                        <p id="selectedPromotionDetails"></p>
+                    </div>
+
+                <!-- Add Policies Section -->
+                <div id="addPoliciesSection" class="mt-5">
+                    <button type="button" class="btn btn-secondary" id="sendPoliciesBtn" data-toggle="modal" data-target="#policyModal">Send Policy</button>
+                    <button type="button" class="btn btn-success" id="addPolicyBtn" data-toggle="modal" data-target="#addPolicyModal">Add Policy</button>
+
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="policyModalLabel">Send Request</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                                <div id="policyForm" class="modal-body">
+                                    <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Discount Type</label><br>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="discountType" id="percentageDiscount" value="percentage">
+                                            <label class="form-check-label" for="percentageDiscount">Percentage Discount</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="discountType" id="fixedDiscount" value="fixed">
+                                            <label class="form-check-label" for="fixedDiscount">Fixed Discount Amount</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="percentageInput" style="display: none;">
+                                        <label for="percentage">Discount Percentage</label>
+                                        <input type="number" class="form-control" id="percentage" name="percentage">
+                                    </div>
+
+                                    <div class="form-group" id="fixedInput" style="display: none;">
+                                        <label for="fixedAmount">Discount Amount</label>
+                                        <input type="number" class="form-control" id="fixedAmount" name="fixedAmount">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="validFrom">Valid From</label>
+                                        <input type="date" class="form-control" id="validFrom" name="validFrom">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="validTo">Valid To</label>
+                                        <input type="date" class="form-control" id="validTo" name="validTo">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-primary" id="submitPolicyBtn">Send</button>
+                                </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="selectedCustomer" class="d-none">
-                <h4>Selected Customer</h4>
-                <p id="customerInfo"></p>
-            </div>
-
-
-            <div class="row">
-                <div class="col-6">
-                    <div class="form-group">
-                        <label style="font-size: 23px; color: blue;" for="searchProduct">Product: </label>
-                        <input type="text" class="form-control" id="searchProduct" name="searchProduct" placeholder="Search Product by Barcode">
-                        <ul class="list-group" id="productResults"></ul>
-
-                        <div id="selectedProduct" class="d-none product-details">
-                            <div class="product-image-container">
-                                <img id="productImage" class="product-image" src="" alt="Product Image">
+                <!-- Add Policy Modal -->
+                <div class="modal fade" id="addPolicyModal" tabindex="-1" role="dialog" aria-labelledby="addPolicyModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addPolicyModalLabel">Select Customer Policy</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <div class="product-info">
-                                <p id="productName"></p>
-                                <p id="productBarcode"></p>
-                                <p id="productPrice"></p>
-                                <p id="productType"></p>
-                                <button type="button" id="addToCartBtn" class="add-to-cart-btn">Add to cart</button>
+                            <div class="modal-body">
+                                
+                                    <!-- Customer policies will be loaded here -->
+                                    <div id="customerPolicies" style="max-height: 400px; overflow-y: auto;">
+                                        @for (int i = 0; i < Model.CustomerPolicies.Count; i++)
+                                        {
+                                            DateTime currentDate = DateTime.Now;
+                                            DateTime validTo = Model.CustomerPolicies[i].ValidTo;
+
+                                            bool isExpired = currentDate > validTo;
+
+                                            <div class="policy-item mb-3">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <strong>Discount:</strong>
+                                                        <span>
+                                                            @if (Model.CustomerPolicies[i].FixedDiscountAmount != null)
+                                                            {
+                                                                @Model.CustomerPolicies[i].FixedDiscountAmount.Value.ToString("N0")
+                                                                @:VNĐ
+                                                            }
+                                                            else if (Model.CustomerPolicies[i].DiscountRate != null)
+                                                            {
+                                                                @Model.CustomerPolicies[i].DiscountRate.ToString()
+                                                                @:%
+                                                            }
+                                                        </span>
+                                                    </div>
+                                                    @if (!isExpired)
+                                                    {
+                                                        <button type="button" class="btn btn-dark applyPolicyBtn" data-policy-id="@Model.CustomerPolicies[i].Id">Apply</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-light" disabled>Expired</button>
+                                                    }
+                                                </div>
+                                                <div>
+                                                    <strong>Valid From:</strong> @Model.CustomerPolicies[i].ValidFrom.ToShortDateString() - <strong>Valid To:</strong> @Model.CustomerPolicies[i].ValidTo.ToShortDateString()
+                                                </div>
+                                            </div>
+                                        }
+                                        @if (!Model.CustomerPolicies.Any())
+                                        {
+                                            <p>No customer policies found.</p>
+                                        }
+                                    </div>
+                               
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
-            <div id="cartInformation" class="mt-5">
-                <h4>Cart Information</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">No.</th>
-                            <th scope="col">Product Name</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Total</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cartItems">
-                  
-                    </tbody>
-                </table>
-            </div>
+                    <!-- Container cho dữ liệu sản phẩm được thêm bằng JavaScript -->
+                    <div id="productData"></div>
 
-            <div id="voucherSection" class="mt-5">
-                <h4>Apply Voucher</h4>
-                <div class="form-group form-inline">
-                    <label for="promotionCode">Enter Voucher Code</label>
-                    <input type="text" class="form-control" id="promotionCode" name="promotionCode">
-                    <button type="button" class="btn btn-primary" id="applyPromotionBtn">Apply Voucher</button>
+                    <div class="totals mt-5">
+                        <div class="line-item">
+                            <span class="label">Provisional:</span>
+                            <span id="provisionalTotal">0 VND</span>
+                        </div>
+                        <div class="line-item">
+                            <span class="label">Total Discount:</span>
+                            <span id="discountAmount">0 VND</span>
+                        </div>
+                        <div class="line-item">
+                            <span class="label">Total:</span>
+                            <span id="totalAmount">0 VND</span>
+                        </div>
+                    </div>
                 </div>
-                <ul class="list-group" id="promotionResults"></ul>
 
-                <!-- Div để hiển thị thông tin Promotion -->
-                <div id="selectedPromotionInfo" class="mt-3 d-none">
-                    <p id="selectedPromotionMessage"></p>
-                    <p id="selectedPromotionDetails"></p>
-                </div>
-            </div>
+          
 
         }
-        <!-- Container cho dữ liệu sản phẩm được thêm bằng JavaScript -->
-        <div id="productData"></div>
+        else if (Model.Type == "purchase")
+        {
+            <!-- Container cho dữ liệu sản phẩm được thêm bằng JavaScript -->
+            <div id="productData"></div>
+            <div class="card p-3">
+                <h4 class="card-title">Set Purchase Rate</h4>
+                <div class="form-inline">
+                    <div class="form-group mb-2">
+                        <label for="purchaseRateInput" class="sr-only">Purchase Rate (%)</label>
+                        <input type="number" class="form-control" id="purchaseRateInput" placeholder="Enter Purchase Rate" style="width: 150px;">
+                    </div>
+                    <button type="button" class="btn btn-primary mb-2" id="applyPurchaseRateBtn">Apply</button>
+                </div>
+            </div>
+            <div class="totals">
+                <div class="line-item">
+                    <span>Purchase Rate:</span>
+                    <span id="purchaseRate">0%</span> <!-- Assuming you want to display some rate here -->
+                </div>
+                <div class="line-item">
+                    <span>Total:</span>
+                    <span id="totalAmount">0 VND</span>
+                </div>
+            </div>
 
-        <div class="totals">
-            <div class="line-item">
-                <span>Provisional:</span>
-                <span id="provisionalTotal">0 VND</span>
-            </div>
-            <div class="line-item">
-                <span>Total Discount:</span>
-                <span id="discountAmount">0 VND</span>
-            </div>
-            <div class="line-item">
-                <span>Total:</span>
-                <span id="totalAmount">0 VND</span>
-            </div>
+            
+
+        }
+        <div id="paymentOptions">
+            <label for="paymentMethod">Choose a payment method:</label>
+            <select id="paymentMethod" name="paymentMethod">
+                <option value="cash">Cash</option>
+                <option value="momo">MoMo QR Code</option>
+            </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <!-- Hidden input để lưu giá trị paymentMethod -->
+        <input type="hidden" id="hiddenPaymentMethod" name="paymentMethod" value="">
+
+
+        <button type="submit" class="btn btn-primary">Submit Order</button>
     </form>
 </div>
 
@@ -241,23 +538,162 @@
     <script>
         var cart = [];
         var itemNo = 1;
+        var Model = {
+            Type: '@Model.Type'
+        };
         $(document).ready(function () {
-           
 
-//select Customer 
-            $('#searchCustomer').on('input', function () {
-                var phoneNumber = $(this).val();
-                if (phoneNumber.length > 2) {
-                    $.get('@Url.Page("/Admin/Orders/Create", new { handler = "SearchCustomers" })', { phone: phoneNumber }, function (data) {
-                        $('#customerResults').empty();
-                        data.forEach(function (customer) {
-                            $('#customerResults').append('<li class="list-group-item" data-id="' + customer.id + '">' + customer.fullName + ' (' + customer.phoneNumber + ')</li>');
+            // Load cart from local storage on page load
+            var savedCart = localStorage.getItem('cart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                itemNo = cart.length + 1;
+
+                cart.forEach(function (item) {
+                    $('#cartItems').append(`
+                    <tr data-id="${item.id}">
+                        <td>${item.no}</td>
+                        <td>${item.name}</td>
+                        <td>${item.type}</td>
+                        <td>$${item.price.toFixed(2)}</td>
+                        <td><input type="number" min="1" max="${item.stock}+1" value="${item.quantity}" class="form-control cartQuantity"></td>
+                        <td>$${item.total.toFixed(2)}</td>
+                        <td><button type="button" class="btn btn-danger btn-sm deleteCartItem">Delete</button></td>
+                    </tr>
+                    `);
+                });
+
+                // Update item numbers and total price
+                updateItemNumbers();
+                calculateTotal();
+            }
+
+            // Khôi phục thông tin khách hàng từ localStorage khi trang được tải lại
+            var savedCustomer = localStorage.getItem('selectedCustomer');
+            if (savedCustomer) {
+                var customer = JSON.parse(savedCustomer);
+                $('#customerId').val(customer.id); // Set the customer ID in the hidden input
+                $('#selectedCustomer').removeClass('d-none');
+                let customerInfo = `
+                    <b> Customer Name:</b> ${customer.fullName}
+                    <br>
+                    <b> Email:</b> ${customer.email}
+                    <br>
+                    <b> Phone:</b> ${customer.phoneNumber}
+                    <br>
+                    <b> Address: </b>${customer.address}
+                    <br>
+                    <b> Point: </b>${customer.accumulated_point}
+                `;
+                $('#customerInfo').html(customerInfo);
+            }
+                // Search order
+                $('#searchOrder').on('input', function () {
+                    var orderId = $(this).val();
+                    if (orderId.length > 0) {
+                        $.get('@Url.Page("/Admin/Orders/Create", new { handler = "SearchOrders" })', { orderID: orderId }, function (data) {
+                            $('#orderResults').empty();
+                            data.forEach(function (order) {
+                                $('#orderResults').append('<li class="list-group-item" data-id="' + order.id + '">' + order.fullName + ' (' + order.date + ')</li>');
+                            });
                         });
+                    } else {
+                        $('#orderResults').empty();
+                    }
+                });
+
+                $(document).on('click', '#orderResults .list-group-item', function () {
+                    var orderId = $(this).data('id');
+
+                    $('#orderID').val(orderId); // Store selected order ID
+
+                    // Fetch order details
+                    $.get('@Url.Page("/Admin/Orders/Create", new { handler = "OrderDetails" })', { orderID: orderId }, function (data) {
+                        if (data.success) {
+                            $('#orderDetailsTable tbody').empty();
+                            data.orderDetails.forEach(function (detail) {
+                                var row = '<tr>' +
+                                    '<td>' + detail.id + '</td>' +
+                                    '<td>' + detail.productID + '</td>' +
+                                    '<td>' + detail.barcode + '</td>' +
+                                    '<td>' + detail.quantity + '</td>' +
+                                    '<td>' + detail.unitPrice + '</td>' +
+                                    '</tr>';
+                                $('#orderDetailsTable tbody').append(row);
+                            });
+
+                            // Extract productIds from orderDetails
+                            var productIds = data.orderDetails.map(function (detail) {
+                                return detail.productID;
+                            });
+                            // Log productIds to console
+                            console.log('Product IDs:', productIds);
+
+                            // Fetch related products
+                            loadProducts(productIds);
+
+                        } else {
+                            $('#orderDetailsTable tbody').empty();
+                            var row = '<tr><td colspan="5">No order details found</td></tr>';
+                            $('#orderDetailsTable tbody').append(row);
+                            alert(data.message);
+                        }
                     });
-                } else {
-                    $('#customerResults').empty();
+
+                    $('#orderResults').empty();
+                    $('#searchOrder').val('');
+                });
+
+                // Function to load products
+                function loadProducts(productIds) {
+                    console.log('Loading products for productIds:', productIds); // Log before sending request
+                    var url = '@Url.Page("/Admin/Orders/Create", new { handler = "OnGetAsync" })';
+                    var queryParams = { currentPage: 1, productIds: productIds };
+                    console.log('Request URL:', url, 'with query params:', queryParams);
+                    $.get(url, queryParams, function (products) {
+                        console.log('Products loaded:', products); // Log the loaded products
+                        displayProducts(products);
+                    });
                 }
-            });
+
+                // Function to display products
+                function displayProducts(products) {
+                console.log('Type of products:', typeof products);
+                    $('#productTableBody').empty(); // Clear old rows in the table
+
+                    if (Array.isArray(products) && products.length > 0) {
+                        products.forEach(function (product) {
+                            var row = '<tr>' +
+                                '<td><img src="' + product.imageUrl + '" alt="' + product.productName + '" class="img-thumbnail" style="max-width: 100px;"></td>' +
+                                '<td>' + product.productName + '</td>' +
+                                '<td>' + product.barcode + '</td>' +
+                                '<td>' + product.quantity + '</td>' +
+                                '<td>' + product.type + '</td>' +
+                                '<td><button type="button" class="btn btn-primary add-to-cart-btn" data-id="' + product.id + '" data-name="' + product.productName + '" data-type="' + product.type + '" data-stock="' + product.quantity + '">Add to cart</button></td>' +
+                                '</tr>';
+                            $('#productTableBody').append(row);
+                        });
+                    } else {
+                        var row = '<tr><td colspan="6">No products found</td></tr>';
+                        $('#productTableBody').append(row);
+                    }
+                }
+
+                // Search order
+                $('#searchCustomer').on('input', function () {
+                    var phone = $(this).val();
+                    if (phone.length > 0) {
+                        $.get('@Url.Page("/Admin/Orders/Create", new { handler = "SearchCustomers" })', { phone: phone }, function (data) {
+                            $('#customerResults').empty();
+                            data.forEach(function (customer) {
+                                $('#customerResults').append('<li class="list-group-item" data-id="' + customer.id + '">' + customer.fullName + ' (' + customer.phoneNumber + ')</li>');
+                            });
+                        });
+                    } else {
+                        $('#customerResults').empty();
+                    }
+                });
+
             $(document).on('click', '#customerResults .list-group-item', function () {
                 var customerId = $(this).data('id');
                 $('#customerId').val(customerId); // Set the customer ID in the hidden input
@@ -267,17 +703,19 @@
                         var customer = data.customer;
                         $('#selectedCustomer').removeClass('d-none');
                         let customerInfo = `
-                            <b> Customer Name:</b> ${customer.fullName}
-                            <br>
-                            <b> Email:</b> ${customer.email}
-                            <br>
-                            <b> Phone:</b> ${customer.phoneNumber}
-                            <br>
-                            <b> Address: </b>${customer.address}
-                            <br>
-                            <b> Point: </b>${customer.accumulated_point}
-                        `;
+                                    <b> Customer Name:</b> ${customer.fullName}
+                                    <br>
+                                    <b> Email:</b> ${customer.email}
+                                    <br>
+                                    <b> Phone:</b> ${customer.phoneNumber}
+                                    <br>
+                                    <b> Address: </b>${customer.address}
+                                    <br>
+                                    <b> Point: </b>${customer.accumulated_point}
+                                `;
                         $('#customerInfo').html(customerInfo);
+                        // Lưu thông tin khách hàng vào localStorage
+                        localStorage.setItem('selectedCustomer', JSON.stringify(customer));
                     } else {
                         $('#selectedCustomer').addClass('d-none');
                         $('#customerInfo').text('');
@@ -288,104 +726,87 @@
                 $('#customerResults').empty();
                 $('#searchCustomer').val('');
             });
+          
 
-            $('#searchProduct').on('input', function () {
-                var barcode = $(this).val();
-                if (barcode.length > 2) {
-                    $.get('@Url.Page("/Admin/Orders/Create", new { handler = "SearchProducts" })', { barcode: barcode }, function (data) {
-                        $('#productResults').empty();
-                        data.forEach(function (product) {
-                            $('#productResults').append('<li class="list-group-item" data-id="' + product.id + '">' + product.productName +  '</li>');
-                        });
-                    });
-                } else {
-                    $('#productResults').empty();
-                }
-            });
+           
+            // Xử lý sự kiện click cho nút Add to cart
+            $(document).on('click', '.add-to-cart-btn', function () {
+                event.preventDefault(); // Ngăn chặn hành động mặc định của form
 
-            $(document).on('click', '#productResults .list-group-item', function () {
-                var productId = $(this).data('id');
+                var product = {
+                    id: $(this).data('id'),
+                    name: $(this).data('name'),
+                    type: $(this).data('type'),
+                    stock: $(this).data('stock')
+                };
 
-                $.get('@Url.Page("/Admin/Orders/Create", new { handler = "ProductDetails" })', { productId: productId }, function (data) {
-                if (data.success !== false) {
-                    $('#selectedProduct').removeClass('d-none');
-                    $('#productImage').attr('src', data.imageUrl);
-                    $('#productName').text("Product name: " + data.productName);
-                    $('#productBarcode').text("Barcode: " + data.barcode);
-                    $('#productType').text("Type: " + data.type); // Assuming you fetch type as well
-                    $('#productResults').empty();
-                    $('#searchProduct').val('');
+                if (Model.Type == "sell") {
+                    // Kiểm tra số lượng sản phẩm trước khi thêm vào giỏ hàng
+                    if (product.stock > 0) {
+                        var quantity = 1; // Mặc định số lượng là 1
 
-                        // Move the price fetching here
-                        $.get('@Url.Page("/Admin/Orders/Create", new { handler = "CalculatePrice" })', { productId: productId }, function (priceData) {
+                        // Gửi yêu cầu AJAX để tính giá sản phẩm dựa trên productId
+                        $.get('@Url.Page("/Admin/Orders/Create", new { handler = "CalculatePrice" })', { productId: product.id }, function (priceData) {
                             if (priceData.success) {
-                                $('#productPrice').text("Price: " + priceData.price.toLocaleString());
-                                $('#addToCartBtn').data('product', {
-                                    id: productId,
-                                    name: data.productName,
-                                    price: priceData.price,
-                                    type: data.type,
-                                    stock: data.quantity
-                                });
+                                var price = priceData.price; // Lấy giá sản phẩm từ kết quả trả về
+
+                                addToCart(product, quantity, price); // Thêm sản phẩm vào giỏ hàng với giá tính được
                             } else {
                                 alert('Error: ' + priceData.message);
                             }
                         });
-
                     } else {
-                        alert(data.message);
+                        alert("Sản phẩm đã hết hàng.");
                     }
-                });
-            });
-
-            $('#addToCartBtn').on('click', function () {
-                event.preventDefault(); // Ngăn chặn hành động mặc định của form
-                var product = $(this).data('product');
-
-                // Kiểm tra số lượng sản phẩm trước khi thêm vào giỏ hàng
-                if (product.stock > 0) {
+                } else if (Model.Type == "purchase") {
                     var quantity = 1; // Mặc định số lượng là 1
-                    console.log("Cart before adding", cart);
-                    addToCart(product, quantity); // Thêm sản phẩm vào giỏ hàng
-                    console.log("Cart after adding", cart);
-                } else {
-                    alert("Sản phẩm đã hết hàng.");
+                    // Gửi yêu cầu AJAX để tính giá sản phẩm dựa trên productId
+                    $.get('@Url.Page("/Admin/Orders/Create", new { handler = "CalculatePrice" })', { productId: product.id }, function (priceData) {
+                        if (priceData.success) {
+                            var price = priceData.price; // Lấy giá sản phẩm từ kết quả trả về
+
+                            addToCart(product, quantity, price); // Thêm sản phẩm vào giỏ hàng với giá tính được
+                        } else {
+                            alert('Error: ' + priceData.message);
+                        }
+                    });
                 }
-                  
             });
 
-            function addToCart(product, quantity) {
+            function addToCart(product, quantity, price) {
                 var cartItem = {
                     id: product.id,
                     no: itemNo++,
                     name: product.name,
-                    type: product.type, // Chỉnh sửa nếu cần thiết
-                    price: product.price,
+                    type: product.type,
+                    price: price,// Sử dụng giá sản phẩm đã tính được
                     quantity: quantity,
-                    total: product.price * quantity
+                    total: price * quantity,
+                    stock: product.stock
                 };
 
                 cart.push(cartItem);
                 console.log("cart: ", cart);
+                // Save cart to local storage
+                localStorage.setItem('cart', JSON.stringify(cart));
 
-
+                // Thêm vào bảng cartItems
                 $('#cartItems').append(`
-            <tr data-id="${product.id}">
-                <td>${cartItem.no}</td>
-                <td>${cartItem.name}</td>
-                <td>${cartItem.type}</td>
-                <td>$${cartItem.price.toFixed(2)}</td>
-                <td><input type="number" min="1" value="${cartItem.quantity}" class="form-control cartQuantity"></td>
-                <td>$${cartItem.total.toFixed(2)}</td>
-                <td><button type="button" class="btn btn-danger btn-sm deleteCartItem">Delete</button></td>
-            </tr>
-        `);
+                <tr data-id="${product.id}">
+                    <td>${cartItem.no}</td>
+                    <td>${cartItem.name}</td>
+                    <td>${cartItem.type}</td>
+                    <td>$${cartItem.price.toFixed(2)}</td>
+                    <td><input type="number" min="1" max="${cartItem.stock}+1" value="${cartItem.quantity}" class="form-control cartQuantity"></td>
+                    <td>$${cartItem.total.toFixed(2)}</td>
+                    <td><button type="button" class="btn btn-danger btn-sm deleteCartItem">Delete</button></td>
+                </tr>
+            `);
+
+               
                 console.log("Added product: ", product.name);
 
-                $('#selectedProduct').addClass('d-none');
-                $('#productInfo').text('');
-
-                // Cập nhật lại số thứ tự (No.)
+                // Cập nhật lại số thứ tự (No.) cho cartItems và cartInformation
                 updateItemNumbers();
 
                 // Tính lại tổng tiền khi số lượng thay đổi
@@ -405,13 +826,25 @@
                 productRow.find('td:eq(5)').text('$' + total.toFixed(2));
 
                 var product = cart.find(item => item.id === productId);
+
                 if (product) {
+                    if (Model.Type == "sell") {
+                        if (newQuantity > product.stock) {
+                            alert('Số lượng sản phẩm không thể vượt quá tồn kho!');
+                            $(this).val(product.quantity); // Đặt lại số lượng cũ
+                            return; // Dừng xử lý thêm nếu số lượng không hợp lệ
+
+                        }
+                    }
+
                     product.quantity = newQuantity;
                     product.total = total;
                 }
 
                 // Tính lại tổng tiền khi số lượng thay đổi
-                calculateTotal();
+                calculateTotal(); 
+
+               
             });
 
             $(document).on('click', '.deleteCartItem', function () {
@@ -424,6 +857,9 @@
 
                 // Tính lại tổng tiền khi xóa sản phẩm
                 calculateTotal();
+
+                // Cập nhật lại localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
             });
 
             function updateItemNumbers() {
@@ -445,8 +881,6 @@
             function resetSelectedProduct() {
                 $('#searchProduct').val('');
                 $('#productResults').empty();
-                $('#selectedProduct').addClass('d-none');
-                $('#productInfo').text('');
             }
 
             //Add Promotion
@@ -472,7 +906,7 @@
                     if (data) {
                         $('#selectedPromotionInfo').removeClass('d-none');
                         $('#selectedPromotionMessage').text('Selected Promotion: ' + data.code);
-                        var promotionDetails = 'Discount: ' + data.discountPercentage*100 + '%';
+                        var promotionDetails = 'Discount: ' + data.discountPercentage * 100 + '%';
                         if (data.fixedDiscountAmount > 0) {
                             promotionDetails += ', Fixed Discount: $' + data.fixedDiscountAmount.toFixed(2) + 'VND';
                         }
@@ -517,6 +951,93 @@
                 // Cập nhật giá trị cho input hidden
                 $('#discountInput').val(discountAmount.toFixed(2));
             });
+
+            $('#applyPurchaseRateBtn').on('click', function () {
+                // Retrieve the purchase rate from input
+                var purchaseRate = parseFloat($('#purchaseRateInput').val());
+
+                // Validate the purchase rate
+                if (isNaN(purchaseRate) || purchaseRate <= 0) {
+                    alert('Please enter a valid purchase rate.');
+                    return;
+                }
+
+                // Convert percentage to decimal for calculation
+                var rateDecimal = purchaseRate / 100;
+
+
+                // Assuming 'totalAmount' holds the initial total from which the rate is applied
+                var totalBeforeRate = calculateTotal(); // Use the improved calculateTotal function
+                var discountAmount = totalBeforeRate * rateDecimal;
+
+
+                // Calculate new total after applying the purchase rate
+                var totalAfterRate = totalBeforeRate * rateDecimal;
+
+                // Update the UI with the calculated totals
+                $('#purchaseRate').text(`${purchaseRate.toFixed(2)}%`);
+                $('#totalAmount').text(`${totalAfterRate.toFixed(2)} VND`);
+
+                // Cập nhật giá trị cho input hidden
+                $('#discountInput').val(discountAmount.toFixed(2));
+            });
+
+            document.querySelectorAll('.applyPolicyBtn').forEach(button => {
+                button.addEventListener('click', function () {
+                    let policyId = this.getAttribute('data-policy-id');
+                    applyPolicy(policyId);
+                });
+            });
+
+            function applyPolicy(policyId) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Admin/Orders/Create?handler=GetPolicy",
+                    data: { policyId: policyId },
+                    success: function (response) {
+                        if (response.success) {
+                            let policy = response.policy;
+                            applyDiscount(policy);
+                           
+                            // Close modal or hide form (adjust as per your implementation)
+                            $('#addPolicyModal').modal('hide');
+
+                            $('#addPolicyModal').on('hidden.bs.modal', function () {
+                                $('.modal-backdrop').remove(); // Xóa backdrop khi modal ẩn đi
+                            });
+                        } else {
+                            console.error(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching policy:', error);
+                    }
+                });
+            }
+
+            function applyDiscount(policy) {
+                console.log('Customer policy:', policy);
+
+                var provisionalTotal = calculateTotal(); // Use the improved calculateTotal function
+                var discountPercentage = policy.discountRate; // Convert percentage to decimal
+                var fixedDiscount = policy.fixedDiscountAmount;
+                var discountAmount = (provisionalTotal * discountPercentage / 100) + fixedDiscount;
+                var totalAfterDiscount = provisionalTotal - discountAmount;
+
+                console.log('Discount Rate:', discountPercentage);
+                console.log('Provisional Total:', provisionalTotal);
+                // Display the updated totals in the respective elements
+                document.getElementById('provisionalTotal').textContent = `${provisionalTotal.toFixed(2)} VND`;
+                document.getElementById('discountAmount').textContent = `${discountAmount.toFixed(2)} VND`;
+                document.getElementById('totalAmount').textContent = `${totalAfterDiscount.toFixed(2)} VND`;
+
+              
+                return 0;
+            }
+
+
+
+
         });
 
 
@@ -528,14 +1049,85 @@
             console.log("Submitting the following products and quantities:");
 
             cart.forEach(function (item, index) {
-                
+
                 $('#productData').append('<input type="hidden" name="productIds[' + index + ']" value="' + item.id + '">');
                 $('#productData').append('<input type="hidden" name="quantities[' + index + ']" value="' + item.quantity + '">');
                 console.log(`Product ID ${item.id}: Quantity ${item.quantity}`);
             });
 
+            // Lấy giá trị của lựa chọn thanh toán từ dropdown
+            var paymentMethod = $('#paymentMethod').val();
+
+            // Đặt giá trị của hidden input
+            $('#hiddenPaymentMethod').val(paymentMethod);
+
             form.off('submit').submit(); // Unbind the submit event handler and submit the form
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const percentageRadio = document.getElementById('percentageDiscount');
+            const fixedRadio = document.getElementById('fixedDiscount');
+            const percentageInput = document.getElementById('percentageInput');
+            const fixedInput = document.getElementById('fixedInput');
+            const submitPolicyBtn = document.getElementById('submitPolicyBtn');
+
+            percentageRadio.addEventListener('change', function () {
+                if (percentageRadio.checked) {
+                    percentageInput.style.display = 'block';
+                    fixedInput.style.display = 'none';
+                }
+            });
+
+            fixedRadio.addEventListener('change', function () {
+                if (fixedRadio.checked) {
+                    fixedInput.style.display = 'block';
+                    percentageInput.style.display = 'none';
+                }
+            });
+
+            submitPolicyBtn.addEventListener('click', function () {
+                const description = document.getElementById('description').value;
+                const discountType = document.querySelector('input[name="discountType"]:checked').value;
+                const percentage = document.getElementById('percentage').value;
+                const fixedAmount = document.getElementById('fixedAmount').value;
+                const validFrom = document.getElementById('validFrom').value;
+                const validTo = document.getElementById('validTo').value;
+
+                const data = {
+                    description: description,
+                    discountRate: percentage,
+                    fixedDiscountAmount: fixedAmount,
+                    validFrom: validFrom,
+                    validTo: validTo
+                };
+
+                fetch('/Admin/CustomerPolicies/Index', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Success:', data);
+                        $('#policyModal').modal('hide');
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+            $('#policyModal').on('hidden.bs.modal', function () {
+                $('.modal-backdrop').remove(); // Xóa backdrop khi modal ẩn đi
+            });
+        });
+
 
     </script>
 }

@@ -11,10 +11,7 @@ namespace RazorPage_Web.Models
 		 public string CreatedBy { get; set; }
 		[Required] public string Type { get; set; }
 		[Required] public int CustomerID { get; set; }
-
-		
-
-
+		public ICollection<OrderDetail> OrderDetails { get; set; }
 
 	}
 }

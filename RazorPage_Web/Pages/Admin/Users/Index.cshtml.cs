@@ -14,6 +14,16 @@ namespace RazorPage_Web.Pages.Admin.Users
 
 		public List<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
 		public Dictionary<string, string> UserRoles { get; set; } = new Dictionary<string, string>();
+		
+
+		[BindProperty(SupportsGet = true)]
+		public string SearchTerm { get; set; }
+
+		// Pagination properties
+		public int CurrentPage { get; set; } = 1;
+		public int TotalPages { get; set; }
+		public int PageSize { get; set; } = 3; // You can adjust the page size as needed
+
 
 		public IndexModel(AppDbContext context, UserManager<ApplicationUser> userManager)
 		{
@@ -22,9 +32,22 @@ namespace RazorPage_Web.Pages.Admin.Users
 		}
 
 
-		public async Task OnGetAsync()
+		public async Task OnGetAsync(int currentPage = 1)
 		{
-			Users = await _context.Users.ToListAsync();
+			CurrentPage = currentPage;
+			var usersQuery = from u in _context.Users
+						select u;
+			if (!string.IsNullOrEmpty(SearchTerm))
+			{
+				usersQuery = usersQuery.Where(u => u.UserName.Contains(SearchTerm) || u.PhoneNumber.Contains(SearchTerm));
+			}
+			int totalUsers = await usersQuery.CountAsync();
+			TotalPages = (int)Math.Ceiling(totalUsers / (double)PageSize);
+			Users = await usersQuery
+					   .OrderByDescending(c => c.Id)
+					   .Skip((CurrentPage - 1) * PageSize)
+					   .Take(PageSize)
+					   .ToListAsync();
 
 			foreach (var user in Users)
 			{

@@ -20,182 +20,118 @@
 
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<!-- Thêm CSS cho sidebar -->
-<style>
-    .sidebar {
-        width: 250px;
-        transition: width 0.3s;
-    }
 
-        .sidebar.collapsed {
-            width: 70px;
-        }
 
-        .sidebar .nav-link span {
-            display: inline-block;
-            transition: opacity 0.3s;
-        }
 
-        .sidebar.collapsed .nav-link span {
-            opacity: 0;
-        }
-
-        .sidebar .toggle-btn {
-            cursor: pointer;
-            font-size: 1.5em;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-    .nav-item .nav-link.active,
-    .nav-item .nav-link.active span,
-    .nav-item .nav-link.active i {
-        background-color: black;
-        color: white !important;
-        border-radius: 5px;
-    }
-
-    .sidebar .nav-link.active,
-    .sidebar .nav-link.active span,
-    .sidebar .nav-link.active i {
-        background-color: black;
-        color: white !important;
-        border-radius: 5px;
-    }
-
-  
-</style>
-
-<!-- Thêm JavaScript cho sidebar -->
-<script>
-    function toggleSidebar() {
-        var sidebar = document.getElementById("sidebar");
-        var toggleIcon = document.getElementById("toggle-icon");
-        sidebar.classList.toggle("collapsed");
-        // Thay đổi biểu tượng khi sidebar được thu gọn/mở rộng
-        if (sidebar.classList.contains("collapsed")) {
-            toggleIcon.classList.remove("fa-angle-left");
-            toggleIcon.classList.add("fa-angle-right");
-        } else {
-            toggleIcon.classList.remove("fa-angle-right");
-            toggleIcon.classList.add("fa-angle-left");
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        var currentPath = window.location.pathname.toLowerCase();
-        console.log("Current Path:", currentPath);  // Thêm dòng này để in giá trị của currentPath
-        var navLinks = document.querySelectorAll(".nav-link");
-
-        navLinks.forEach(function (navLink) {
-            var linkPath = navLink.getAttribute("href");
-
-            if (linkPath) {  // Kiểm tra nếu linkPath không phải là null hoặc undefined
-                linkPath = linkPath.toLowerCase();
-                var normalizedLinkPath = new URL(linkPath, window.location.origin).pathname.toLowerCase();
-
-                if (currentPath === normalizedLinkPath ) {
-                    navLink.classList.add("active");
-                } else {
-                    navLink.classList.remove("active");
-                }
-            }
-        });
-    });
-</script>
-<!-- Sidebar -->
-
-<div id="sidebar" class="sidebar bg-white text-dark p-3">
-    <div class="toggle-btn" onclick="toggleSidebar()">
-        <i id="toggle-icon" class="fa fa-angle-left"></i>
+<!-- Sidebar user panel (optional) -->
+<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="image">
+        <img src="~/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
     </div>
-
-<ul class="nav flex-column">
-    @if (isAdmin)
-    {
-        <li class="nav-item">
-                <a class="nav-link text-dark" asp-page="/User">
-                <i class="fa-solid fa-house"></i> <span>Home</span>
-            </a>
-        </li>
-        <li class="nav-item">
-                <a class="nav-link text-dark" asp-page="/Admin/Dashboard/Index">
-                <i class="fa-solid fa-chart-line"></i> <span> Dashboard</span>
-            </a>
-        </li>
-        <li class="nav-item">
-                <a class="nav-link text-dark" asp-page="/Admin/Products/Index">
-                <i class="fa-solid fa-bag-shopping"></i> <span> Product</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Admin/Orders/Index">
-                <i class="fa-solid fa-cart-shopping"></i> <span> Order</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Admin/Customers/Index">
-                <i class="fa-solid fa-person"></i> <span> Customer</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Admin/Users/Index">
-                <i class="fa-solid fa-people-arrows"></i> <span> User Manager</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Admin/Counters/Index">
-                <i class="fa-solid fa-tags"></i> <span> Counter</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Admin/Promotions/Index">
-                <i class="fa-solid fa-percent"></i> <span> Promotion</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Admin/Logout">
-                <i class="fa-solid fa-right-from-bracket"></i> <span> Logout</span>
-            </a>
-        </li>
-    }
-    else if (isManager)
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Manager/Home">
-                <i class="fa-solid fa-house"></i> <span>Home</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Manager/Dashboard">
-                <i class="fa-solid fa-chart-line"></i> <span> Dashboard</span>
-            </a>
-        </li>
-        <!-- Thêm các menu khác cho manager -->
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Manager/Logout">
-                <i class="fa-solid fa-right-from-bracket"></i> <span> Logout</span>
-            </a>
-        </li>
-    }
-    else if (isStaff)
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Staff/Home">
-                <i class="fa-solid fa-house"></i> <span>Home</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Staff/Dashboard">
-                <i class="fa-solid fa-chart-line"></i> <span> Dashboard</span>
-            </a>
-        </li>
-        <!-- Thêm các menu khác cho staff -->
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-page="/Staff/Logout">
-                <i class="fa-solid fa-right-from-bracket"></i> <span> Logout</span>
-            </a>
-        </li>
-    }
-</ul>
+    <div class="info">
+        <a href="/User" class="d-block">@UserManager.GetUserName(User)</a>
+    </div>
 </div>
+<!-- Sidebar Menu -->
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        @if (isAdmin)
+        {
+            <li class="nav-item">
+                <a asp-page="/User" class="nav-link">
+                    <i class="nav-icon fas fa-house"></i>
+                    <p>
+                        Home
+                    </p>
+                </a>
+            </li>
+
+            <!-- Add icons to the links using the .nav-icon class
+                    with font-awesome or any other icon font library -->
+
+            <li class="nav-item">
+                <a asp-page="/Admin/Dashboard/Index" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Dashboard v1</p>
+                </a>
+            </li>
+         
+            <li class="nav-item">
+                <a asp-page="/Admin/Products/Index" class="nav-link">
+                    <i class="nav-icon fas fa-bag-shopping"></i>
+                    <p>
+                        Products
+                        <span class="right badge badge-danger">New</span>
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-page="/Admin/Orders/Index" class="nav-link">
+                    <i class="nav-icon fas fa-cart-shopping"></i>
+                    <p>
+                        Orders
+                        <span class="right badge badge-danger">New</span>
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-page="/Admin/Customers/Index" class="nav-link">
+                    <i class="nav-icon fas fa-person"></i>
+                    <p>
+                        Customers
+
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-page="/Admin/Users/Index" class="nav-link">
+                    <i class="nav-icon fas fa-people-arrows"></i>
+                    <p>
+                        Users Manager
+                        <span class="right badge badge-danger">New</span>
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-page="/Admin/Counters/Index" class="nav-link">
+                    <i class="nav-icon fas fa-tags"></i>
+                    <p>
+                        Counters
+
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-page="/Admin/CustomerPolicies/Index" class="nav-link">
+                    <i class="nav-icon fas fa-bag-shopping"></i>
+                    <p>
+                        Customer Policies
+                        <span class="right badge badge-danger">New</span>
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-page="/Admin/Promotions/Index" class="nav-link">
+                    <i class="nav-icon fas fa-percent"></i>
+                    <p>
+                        Promotions
+
+                    </p>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a asp-page="/Admin/Logout" class="nav-link">
+                    <i class="nav-icon fas fa-right-from-bracket"></i>
+                    <p>
+                        Logout
+
+                    </p>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

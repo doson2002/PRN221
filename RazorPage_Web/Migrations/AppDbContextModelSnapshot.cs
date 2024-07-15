@@ -51,19 +51,19 @@ namespace RazorPage_Web.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "13995dc9-d0b6-42b7-87b9-6d4b3e6974b8",
+                            Id = "2eff697e-030c-4eb8-99db-93597029830f",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
-                            Id = "13cd5b9f-af52-4819-8c33-5e73b6b1906f",
+                            Id = "08ee098a-d590-4311-97c3-a5b68552fa6d",
                             Name = "manager",
                             NormalizedName = "manager"
                         },
                         new
                         {
-                            Id = "ac8cc471-a5e5-4868-bc38-5b41319f19c9",
+                            Id = "5c25e6e7-af73-411b-9e43-1aa8ac312ce3",
                             Name = "staff",
                             NormalizedName = "staff"
                         });
@@ -319,6 +319,48 @@ namespace RazorPage_Web.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("RazorPage_Web.Models.CustomerPolicy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("ApprovalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ApprovedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("DiscountRate")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("FixedDiscountAmount")
+                        .HasColumnType("float");
+
+                    b.Property<string>("PublishingStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ValidFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ValidTo")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomerPolicies");
+                });
+
             modelBuilder.Entity("RazorPage_Web.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -370,6 +412,8 @@ namespace RazorPage_Web.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderID");
 
                     b.ToTable("OrderDetails");
                 });
@@ -539,9 +583,25 @@ namespace RazorPage_Web.Migrations
                         .HasForeignKey("CounterID");
                 });
 
+            modelBuilder.Entity("RazorPage_Web.Models.OrderDetail", b =>
+                {
+                    b.HasOne("RazorPage_Web.Models.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("RazorPage_Web.Models.Counter", b =>
                 {
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("RazorPage_Web.Models.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

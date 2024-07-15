@@ -1,0 +1,43 @@
+﻿@page
+@model RazorPage_Web.Pages.Staff.Promotions.IndexModel
+@{
+}
+<h2 class="text-center mb-5">List of Promotions </h2>
+<div class="row mb-5">
+	<div class="col">
+		<a class='btn btn-primary' href='/Staff/Promotions/Create'>Add New Promotions</a>
+
+	</div>
+	<div class="col">
+	</div>
+
+</div>
+<table class="table">
+	<tr>
+		<th>ID</th>
+		<th>Code</th>
+		<th>Discount Percentage</th>
+		<th>Fixed Discount Amount</th>
+		<th>Start Date</th>
+		<th>End Date</th>
+		<th>Action</th>
+	</tr>
+
+	@foreach (var promotion in Model.Promotions)
+	{
+		<tr>
+			<td>@promotion.Id</td>
+			<td>@promotion.Code</td>
+			<td>@promotion.DiscountPercentage</td>
+			<td>@promotion.FixedDiscountAmount</td>
+			<td>@promotion.StartDate</td>
+			<td>@promotion.EndDate</td>
+			<td style="white-space:nowrap">
+				<a class='btn btn-primary btn-sm' href='/Staff/Promotions/Edit?id=@promotion.Id'>Edit</a>
+				<a class='btn btn-danger btn-sm' href='/Staff/Promotions/Delete?id=@promotion.Id'>Delete</a>
+			</td>
+
+		</tr>
+	}
+
+</table>

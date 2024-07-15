@@ -1,0 +1,43 @@
+﻿@page
+@model RazorPage_Web.Pages.Staff.Customers.IndexModel
+@{
+}
+<h2 class="text-center mb-5">List of Customer </h2>
+<div class="row mb-5">
+	<div class="col">
+		<a class='btn btn-primary' href='/Staff/Customers/Create'>Add New Customers</a>
+
+	</div>
+	<div class="col">
+	</div>
+
+</div>
+<table class="table">
+	<tr>
+		<th>ID</th>
+		<th>Full Name</th>
+		<th>Email</th>
+		<th>Phone Number</th>
+		<th>Address</th>
+		<th>Accumulated Point</th>
+		<th>Action</th>
+	</tr>
+
+	@foreach (var customer in Model.Customers)
+	{
+		<tr>
+			<td>@customer.Id</td>
+			<td>@customer.FullName</td>
+			<td>@customer.Email</td>
+			<td>@customer.PhoneNumber</td>
+			<td>@customer.Address</td>
+			<td>@customer.accumulated_point</td>
+			<td style="white-space:nowrap">
+				<a class='btn btn-primary btn-sm' href='/Staff/Customers/Edit?id=@customer.Id'>Edit</a>
+				<a class='btn btn-danger btn-sm' href='/Staff/Customers/Delete?id=@customer.Id'>Delete</a>
+			</td>
+
+		</tr>
+	}
+
+</table>

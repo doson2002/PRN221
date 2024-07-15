@@ -3,6 +3,8 @@ using RazorPage_Web.DAL;
 using Microsoft.AspNetCore.Identity;
 using RazorPage_Web.Models;
 using RazorPage_Web.Pages.Admin.Promotions;
+using RazorPage_Web.Hubs;
+using RazorPage_Web.Services;
 
 namespace RazorPage_Web
 {
@@ -14,8 +16,13 @@ namespace RazorPage_Web
   
             // Add services to the container.
             builder.Services.AddRazorPages();
-            //DI
-            builder.Services.AddDbContext<AppDbContext>
+            // Add session services
+            builder.Services.AddSession();
+            builder.Services.AddDistributedMemoryCache(); // Needed for session state
+
+			builder.Services.AddSignalR();
+			//DI
+			builder.Services.AddDbContext<AppDbContext>
                 (options =>
                 options.UseSqlServer
                 (builder.Configuration.GetConnectionString
@@ -28,8 +35,13 @@ namespace RazorPage_Web
 
             // Add PromotionService
             builder.Services.AddScoped<PromotionService>();
+            builder.Services.AddScoped<OrderService>();
 
-            var app = builder.Build();
+			builder.Services.AddHttpClient();
+			builder.Services.AddTransient<MoMoPaymentService>();
+
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -45,19 +57,20 @@ namespace RazorPage_Web
 
             app.UseRouting();
 
+            app.UseSession();
             app.UseAuthentication(); // Add this line to enable authentication
 
             app.UseAuthorization();
+           
+
 
             app.MapRazorPages();
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapControllerRoute(
-					name: "admin_users",
-					pattern: "Admin/Users/{action}/{id?}",
-					defaults: new { controller = "Users", area = "Admin" }
-				);
+                endpoints.MapRazorPages();
+
+				endpoints.MapHub<SignalRServer>("/signalrServer");
 			});
 
 			using (var scope = app.Services.CreateScope())
