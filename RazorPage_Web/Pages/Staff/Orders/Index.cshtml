@@ -3,72 +3,99 @@
 @{
 }
 <h2 class="text-center mb-5">List of Order </h2>
-<div class="row mb-5">
+<div class="row mb-3">
 	<div class="col">
 		<button class="btn btn-primary" id="makeNewOrderBtn">Make New Order</button>
 	</div>
-	<div class="col">
-	</div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="orderModalLabel">Select Order Type</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
+	<div class="col d-flex justify-content-end">
+		<form method="get" class="form-inline">
+			<div class="form-group mb-2">
+				<label for="StartDate" class="sr-only">Start Date:</label>
+				<input type="date" id="StartDate" name="StartDate" class="form-control" value="@Model.StartDate?.ToString("yyyy-MM-dd")" />
 			</div>
-			<div class="modal-body">
-				<button class="btn btn-success" id="purchaseBtn">Purchase</button>
-				<button class="btn btn-danger" id="sellBtn">Sell</button>
+			<div class="form-group mx-sm-3 mb-2">
+				<label for="EndDate" class="sr-only">End Date:</label>
+				<input type="date" id="EndDate" name="EndDate" class="form-control" value="@Model.EndDate?.ToString("yyyy-MM-dd")" />
+			</div>
+			<button type="submit" class="btn btn-primary mb-2">Search</button>
+		</form>
+	</div>
+	@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+	{
+		<div class="alert alert-success">
+			@Model.SuccessMessage
+		</div>
+	}
+
+	<!-- Modal -->
+	<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="orderModalLabel">Select Order Type</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeModalBtn">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<button class="btn btn-success" id="purchaseBtn">Purchase</button>
+					<button class="btn btn-danger" id="sellBtn">Sell</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
-<table class="table">
-	<tr>
-		<th>ID</th>
-		<th>Date</th>
-		<th>Discount</th>
-		<th>Created By</th>
-		<th>Type</th>
-		<th>Customer</th>
-		<th>Action</th>
-	</tr>
 
-	@foreach (var order in Model.Orders)
-	{
+
+	<table class="table">
 		<tr>
-			<td>@order.Id</td>
-			<td>@order.Date</td>
-			<td>@order.Discount</td>
-			<td>@order.CreatedBy</td>
-			<td>@order.Type</td>
-			<td>@order.CustomerID</td>
+			<th>ID</th>
+			<th>Date</th>
+			<th>Discount</th>
+			<th>Created By</th>
+			<th>Type</th>
+			<th>Customer</th>
+			<th>Action</th>
 		</tr>
+
+		@foreach (var order in Model.Orders)
+		{
+			<tr>
+				<td>@order.Id</td>
+				<td>@order.Date</td>
+				<td>@order.Discount</td>
+				<td>@order.CreatedBy</td>
+				<td>@order.Type</td>
+				<td>@order.CustomerID</td>
+				<td style="white-space:nowrap">
+					
+					<a class='btn btn-info btn-sm' href='/Staff/Orders/Details?id=@order.Id'>View Details</a>
+				</td>
+
+			</tr>
+		}
+
+	</table>
+
+	@section Scripts {
+		<script src="~/lib/jquery/dist/jquery.min.js"></script>
+		<script src="~/lib/popperjs/core/dist/umd/popper.min.js"></script>
+		<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 	}
-
-</table>
-
-@section Scripts {
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 	<script>
-		document.getElementById('makeNewOrderBtn').addEventListener('click', function() {
+		document.getElementById('makeNewOrderBtn').addEventListener('click', function () {
 			$('#orderModal').modal('show');
 		});
 
-		document.getElementById('purchaseBtn').addEventListener('click', function() {
+		document.getElementById('closeModalBtn').addEventListener('click', function () {
+			$('#orderModal').modal('hide');
+		});
+
+		document.getElementById('purchaseBtn').addEventListener('click', function () {
 			window.location.href = '@Url.Page("/Staff/Orders/Create", new { type = "purchase" })';
 		});
 
-		document.getElementById('sellBtn').addEventListener('click', function() {
+		document.getElementById('sellBtn').addEventListener('click', function () {
 			window.location.href = '@Url.Page("/Staff/Orders/Create", new { type = "sell" })';
 		});
 	</script>
-}

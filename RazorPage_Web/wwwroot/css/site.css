@@ -23,3 +23,86 @@ body {
 .gray-background {
     background-color: #cccccc; /* Mã màu xám theo ý bạn */
 }
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+    background-color: #343a40;
+    color: white;
+}
+
+    .header h1 {
+        margin: 0;
+    }
+
+.account-info {
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+    .info p {
+        margin: 0;
+    }
+
+.dashboard {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.card {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 1;
+    margin: 0 10px;
+    text-align: center;
+}
+
+    .card h2 {
+        margin: 0 0 10px;
+    }
+
+    .card p {
+        margin: 0;
+    }
+
+.policy {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+    .policy h2 {
+        margin-top: 0;
+    }
+
+    .policy ul {
+        padding-left: 20px;
+    }
+
+    .policy li {
+        margin-bottom: 10px;
+    }

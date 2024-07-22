@@ -12,26 +12,40 @@
 	</div>
 
 </div>
-<table class="table">
-	<tr>
-		<th>ID</th>
-		<th>Counter Name</th>
-		<th>Location</th>
-		<th>Action</th>
-	</tr>
-
-	@foreach (var counter in Model.Counters)
-	{
+<table id="counterTable" class="table">
+	<thead>
 		<tr>
-			<td>@counter.Id</td>
-			<td>@counter.Name</td>
-			<td>@counter.Location</td>
-			<td style="white-space:nowrap">
-				<a class='btn btn-primary btn-sm' href='/Admin/Counters/Edit?id=@counter.Id'>Edit</a>
-				<a class='btn btn-danger btn-sm' href='/Admin/Counters/Delete?id=@counter.Id'>Delete</a>
-			</td>
-
+			<th>ID</th>
+			<th>Counter Name</th>
+			<th>Location</th>
+			<th>Action</th>
 		</tr>
-	}
+	</thead>
+
+	<tbody>
+		@foreach (var counter in Model.Counters)
+		{
+			<tr>
+				<td>@counter.Id</td>
+				<td>@counter.Name</td>
+				<td>@counter.Location</td>
+				<td style="white-space:nowrap">
+					<a class='btn btn-primary btn-sm' href='/Admin/Counters/Edit?id=@counter.Id'>Edit</a>
+					<a class='btn btn-danger btn-sm' href='/Admin/Counters/Delete?id=@counter.Id'>Delete</a>
+				</td>
+
+			</tr>
+		}
+	</tbody>
+	
 
 </table>
+
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			$('#counterTable').DataTable();
+		});
+	</script>
+}

@@ -17,7 +17,10 @@ namespace RazorPage_Web.Pages.Admin.CustomerPolicies
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly AppDbContext _context;
 
-
+        // Pagination properties
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; }
+        public int PageSize { get; set; } = 6; // You can adjust the page size as needed
         public List<CustomerPolicy> CustomerPolicies { get; set; } = new List<CustomerPolicy>();
 
         public IndexModel(AppDbContext context, UserManager<ApplicationUser> userManager)
@@ -26,9 +29,19 @@ namespace RazorPage_Web.Pages.Admin.CustomerPolicies
             this._userManager = userManager;
 
         }
-        public void OnGet()
+        public async Task<IActionResult> OnGetAsync(int currentPage = 1)
         {
-            CustomerPolicies = _context.CustomerPolicies.OrderByDescending(p => p.Id).ToList();
+            CurrentPage = currentPage;
+            int totalPolicies = await _context.CustomerPolicies.CountAsync();
+            TotalPages = (int)Math.Ceiling(totalPolicies / (double)PageSize);
+
+            CustomerPolicies = await _context.CustomerPolicies
+           .OrderByDescending(p => p.Id)
+           .Skip((CurrentPage - 1) * PageSize)
+           .Take(PageSize)
+           .ToListAsync();
+
+            return Page();
         }
 
         public string errorMessage = "";

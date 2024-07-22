@@ -1,17 +1,164 @@
 ﻿@page
 @model RazorPage_Web.Pages.UserModel
 @{
+    ViewData["Title"] = "User Account";
+
 }
-<h2 class="text-center">Welcome to your account</h2>
-<div>
-	Full Name: @Model.appUser?.FullName
+
+<div class="header">
+    <h1>Welcome to Jewelry Selling System Dashboard, @Model.appUser?.FullName!</h1>
 </div>
-<div>
-	Email: @Model.appUser?.Email
+<div class="container">
+    <div class="account-info">
+        <div class="user-info-header">
+            <h2>User Information</h2>
+            <a href="/Identity/Account/Manage/ChangePassword" class="update-password-button">Update password</a>
+        </div>
+        <div class="info">
+            <p>Email: @Model.appUser?.Email</p>
+            <p>Name: @Model.appUser?.FullName</p>
+            <p>Phone Number: @Model.appUser?.PhoneNumber</p>
+            <p>Address: @Model.appUser?.Address</p>
+           
+        </div>
+    </div>
+    <div class="dashboard">
+        <div class="card">
+            <h2>Total Products</h2>
+            <p>@Model.TotalProducts</p>
+        </div>
+        <div class="card">
+            <h2>Total Employees</h2>
+            <p>@Model.TotalEmployees</p>
+        </div>
+        <div class="card">
+            <h2>Total Orders</h2>
+            <p>@Model.TotalOrders</p>
+        </div>
+        <div class="card">
+            <h2>Total Customers</h2>
+            <p>@Model.TotalCustomers</p>
+        </div>
+    </div>
+    <div class="policy">
+        <h2>Chính sách đổi trả trang sức</h2>
+        <ul>
+            <li>Thời gian đổi trả: Khách hàng có thể đổi trả sản phẩm trong vòng 30 ngày kể từ ngày mua hàng, với điều kiện sản phẩm còn nguyên mới và chưa qua sử dụng.</li>
+            <li>Điều kiện đổi trả: Sản phẩm phải được trả lại cùng với hóa đơn mua hàng và tem bảo hành còn nguyên vẹn.</li>
+            <li>Loại trả hàng: Chúng tôi chấp nhận trả lại hoặc đổi sản phẩm, không hoàn tiền mặt.</li>
+            <li>Trường hợp đặc biệt: Đối với sản phẩm bị lỗi do sản xuất, chúng tôi sẽ chịu trách nhiệm sửa chữa hoặc đổi mới sản phẩm cho khách hàng.</li>
+            <li>Đổi trả trực tiếp tại cửa hàng: Khách hàng có thể đến đổi trả sản phẩm một cách nhanh chóng và thuận tiện.</li>
+            <li>Chính sách không áp dụng: Chính sách không áp dụng cho các trường hợp sản phẩm đã qua sử dụng hoặc bị hư hỏng do sử dụng không đúng cách.</li>
+            <li>Thời gian xử lý: Chúng tôi cam kết xử lý yêu cầu đổi trả của khách hàng trong vòng 7 ngày làm việc kể từ khi nhận được sản phẩm trả lại.</li>
+        </ul>
+    </div>
 </div>
-<div>
-	Phone Number: @Model.appUser?.PhoneNumber
-</div>
-<div>
-	Address: @Model.appUser?.Address
-</div>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .header {
+        text-align: center;
+        padding: 20px;
+        background-color: #343a40;
+        color: white;
+    }
+
+        .header h1 {
+            margin: 0;
+        }
+
+    .account-info {
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .user-info-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+        .user-info-header h2 {
+            margin: 0;
+        }
+
+    .update-password-button {
+        background-color: #343a40;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-decoration: none; /* Remove underline */
+        display: inline-block; /* Needed to make padding apply correctly */
+    }
+
+        .update-password-button:hover {
+            background-color: #495057;
+        }
+
+    .info {
+        margin-bottom: 10px;
+    }
+
+        .info p {
+            margin: 0;
+        }
+
+    .dashboard {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        flex: 1;
+        margin: 0 10px;
+        text-align: center;
+        max-width: 200px;
+    }
+
+        .card h2 {
+            margin: 0 0 10px;
+        }
+
+        .card p {
+            margin: 0;
+        }
+    .policy {
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+
+        .policy h2 {
+            margin-top: 0;
+        }
+
+        .policy ul {
+            padding-left: 20px;
+        }
+
+        .policy li {
+            margin-bottom: 10px;
+        }
+
+</style>

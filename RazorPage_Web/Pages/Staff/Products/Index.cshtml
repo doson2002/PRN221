@@ -1,10 +1,26 @@
 ﻿@page
-@model RazorPage_Web.Pages.Staff.Products.IndexModel
+@model RazorPage_Web.Pages.User.Products.IndexModel
 @{
 }
 
 <h2 class="text-center mb-5">List of Products </h2>
+<div class="row mb-5">
 
+	<div class="col">
+		<form class="form-inline" method="get" action="/Admin/Products">
+
+			<div class="input-group">
+				<input type="text" name="searchBarcode" class="form-control" placeholder="Search by Barcode" value="@Model.SearchBarcode" />
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-primary">Search</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+
+
+</div>
 <table class="table">
 	<tr>
 		<th>ID</th>
@@ -14,9 +30,10 @@
 		<th>Description</th>
 		<th>Quantity</th>
 		<th>Weight</th>
+		<th>Action</th>
 	</tr>
 
-	@foreach(var product in Model.Products )
+	@foreach (var product in Model.Products)
 	{
 		<tr>
 			<td>@product.Id</td>
@@ -26,9 +43,35 @@
 			<td>@product.Description</td>
 			<td>@product.Quantity</td>
 			<td>@product.Weight</td>
-		
+			<td style="white-space:nowrap">
+				
+				<a class='btn btn-success btn-sm'  asp-page="./Details" asp-route-id="@product.Id">Details</a>
+
+			</td>
 
 		</tr>
 	}
-		
+
 </table>
+
+<!-- Pagination Controls -->
+<div class="pagination-wrapper">
+	<nav aria-label="Page navigation example">
+		<ul class="pagination">
+			<li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+				<a class="page-link" href="/Staff/Products?currentPage=@(Model.CurrentPage - 1)&searchBarcode=@Model.SearchBarcode">Previous</a>
+			</li>
+
+			@for (int i = 1; i <= Model.TotalPages; i++)
+			{
+				<li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+					<a class="page-link" href="/Staff/Products?currentPage=@i&searchBarcode=@Model.SearchBarcode">@i</a>
+				</li>
+			}
+
+			<li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+				<a class="page-link" href="/Staff/Products?currentPage=@(Model.CurrentPage + 1)&searchBarcode=@Model.SearchBarcode">Next</a>
+			</li>
+		</ul>
+	</nav>
+</div>
