@@ -2,6 +2,57 @@
 @model RazorPage_Web.Pages.Admin.Orders.IndexModel
 @{
 }
+<style>
+	/* Tùy chỉnh DataTable */
+	.dataTables_wrapper .dataTables_paginate .paginate_button {
+		padding: 0.5em 1em;
+		margin-left: 2px;
+		background: #007bff;
+		color: white !important;
+		border: 1px solid #007bff;
+		border-radius: 5px;
+		cursor: pointer;
+	}
+
+		.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+			background: #0056b3;
+			border: 1px solid #0056b3;
+		}
+
+	.dataTables_wrapper .dataTables_filter input {
+		margin-left: 0.5em;
+		padding: 0.3em;
+		border: 1px solid #007bff;
+		border-radius: 5px;
+	}
+
+	.dataTables_wrapper .dataTables_length select {
+		margin-left: 0.5em;
+		padding: 0.3em;
+		border: 1px solid #007bff;
+		border-radius: 5px;
+	}
+
+	.dataTables_wrapper .dataTables_info {
+		margin-top: 10px;
+		font-size: 0.9em;
+	}
+
+	.dataTables_wrapper .dataTables_filter {
+		float: right;
+		text-align: right;
+	}
+
+	.dataTables_wrapper .dataTables_paginate {
+		float: right;
+		margin-top: 10px;
+	}
+
+	.dataTables_wrapper .dataTables_length {
+		float: left;
+		margin-top: 10px;
+	}
+</style>
 <h2 class="text-center mb-5">List of Order </h2>
 <div class="row mb-3">
 	<div class="col">
@@ -45,58 +96,68 @@
 	</div>
 </div>
 
-
-
-<table class="table">
-	<tr>
-		<th>ID</th>
-		<th>Date</th>
-		<th>Discount</th>
-		<th>Created By</th>
-		<th>Type</th>
-		<th>Customer</th>
-		<th>Action</th>
-	</tr>
-
-	@foreach (var order in Model.Orders)
-	{
-		<tr>
-			<td>@order.Id</td>
-			<td>@order.Date</td>
-			<td>@order.Discount</td>
-			<td>@order.CreatedBy</td>
-			<td>@order.Type</td>
-			<td>@order.CustomerID</td>
-			<td style="white-space:nowrap">
-				<a class='btn btn-primary btn-sm' href='/Admin/Orders/Edit?id=@order.Id'>Edit</a>
-				<a class='btn btn-danger btn-sm' href='/Admin/Orders/Delete?id=@order.Id'>Delete</a>
-				<a class='btn btn-info btn-sm' href='/Admin/Orders/Details?id=@order.Id'>View Details</a>
-			</td>
-
-		</tr>
-	}
-
+<table id="orderTable" class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Date</th>
+				<th>Discount</th>
+				<th>Created By</th>
+				<th>Type</th>
+				<th>Customer</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var order in Model.Orders)
+			{
+				<tr>
+					<td>@order.Id</td>
+					<td>@order.Date</td>
+					<td>@order.Discount</td>
+					<td>@order.CreatedBy</td>
+					<td>@order.Type</td>
+					<td>@order.CustomerID</td>
+					<td style="white-space:nowrap">
+						<a class='btn btn-danger btn-sm' href='/Admin/Orders/Delete?id=@order.Id'>Delete</a>
+						<a class='btn btn-info btn-sm' href='/Admin/Orders/Details?id=@order.Id'>View Details</a>
+					</td>
+				</tr>
+			}
+		</tbody>
 </table>
 
 @section Scripts {
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/popperjs/core/dist/umd/popper.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-	}
-	<script>
-		document.getElementById('makeNewOrderBtn').addEventListener('click', function() {
-			$('#orderModal').modal('show');
-		});
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    
+		<script>
 
-		document.getElementById('closeModalBtn').addEventListener('click', function () {
-			$('#orderModal').modal('hide');
-		});
+			$(document).ready(function () {
+				$('#orderTable').DataTable();
+			});
 
-		document.getElementById('purchaseBtn').addEventListener('click', function() {
-			window.location.href = '@Url.Page("/Admin/Orders/Create", new { type = "purchase" })';
-		});
+			document.getElementById('makeNewOrderBtn').addEventListener('click', function () {
+				$('#orderModal').modal('show');
+			});
 
-		document.getElementById('sellBtn').addEventListener('click', function() {
-			window.location.href = '@Url.Page("/Admin/Orders/Create", new { type = "sell" })';
-		});
-	</script>
+			document.getElementById('closeModalBtn').addEventListener('click', function () {
+				$('#orderModal').modal('hide');
+			});
+
+			document.getElementById('purchaseBtn').addEventListener('click', function () {
+				window.location.href = '@Url.Page("/Admin/Orders/Create", new { type = "purchase" })';
+			});
+
+			document.getElementById('sellBtn').addEventListener('click', function () {
+				window.location.href = '@Url.Page("/Admin/Orders/Create", new { type = "sell" })';
+			});
+		</script>
+
+}
+	
+	
+	

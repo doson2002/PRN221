@@ -298,7 +298,7 @@
         <input type="hidden" id="customerId" name="customerId" value="">
         <input type="hidden" id="promotionId" name="promotionId" value="">
 
-        <input type="hidden" id="discountInput" name="discount" value="0" />
+        <input type="hidden" id="discountInput" name="discount" value="" />
 
         <input type="hidden" id="type" name="type" value="@Model.Type" />
 
@@ -968,12 +968,13 @@
 
                 // Assuming 'totalAmount' holds the initial total from which the rate is applied
                 var totalBeforeRate = calculateTotal(); // Use the improved calculateTotal function
-                var discountAmount = totalBeforeRate * rateDecimal;
+                
 
 
                 // Calculate new total after applying the purchase rate
                 var totalAfterRate = totalBeforeRate * rateDecimal;
 
+                var discountAmount = totalBeforeRate - totalAfterRate;
                 // Update the UI with the calculated totals
                 $('#purchaseRate').text(`${purchaseRate.toFixed(2)}%`);
                 $('#totalAmount').text(`${totalAfterRate.toFixed(2)} VND`);
